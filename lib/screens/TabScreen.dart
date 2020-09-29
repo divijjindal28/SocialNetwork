@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socialmediaapp/screens/AccountScreen.dart';
 import 'package:socialmediaapp/screens/HomeScreen.dart';
 import 'package:socialmediaapp/screens/SearchScreen.dart';
+import 'package:socialmediaapp/screens/UserScreen.dart';
 
 
 class TabScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _tabs_screenState extends State<TabScreen> {
 
       {'page':HomeScreen(),'title':'Home'},
       {'page':SearchScreen(),'title':'Search'},
-      {'page':AccountScreen(),'title':'Accout'}
+      {'page':UserScreen(),'title':'Accout'}
 
     ];
 
