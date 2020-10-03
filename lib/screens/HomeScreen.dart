@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Container(
           width: width > 500 ? 500 : double.infinity,
-
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
           child: ListView.builder(
               itemCount: 10,
               itemBuilder: (ctx,index){

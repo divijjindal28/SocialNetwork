@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PostFrame extends StatelessWidget {
+  bool commentWork;
+  PostFrame({this.commentWork = true});
   @override
   Widget build(BuildContext context) {
 
     return Card(
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+
             elevation: 4,
             child: Column(
               children: <Widget>[
@@ -35,7 +37,7 @@ class PostFrame extends StatelessWidget {
                           342),
                       feedbackRow(
                           const Icon(Icons.mode_comment, color: Colors.grey),
-                          null,
+                          commentWork ? null : null,
                           5),
                       feedbackRow(
                           const Icon(Icons.share, color: Colors.grey), null, 16)

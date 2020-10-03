@@ -4,7 +4,7 @@ class UserDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:const EdgeInsets.only(left: 10,right: 10, top: 0,bottom: 4),
+      margin:const EdgeInsets.only(bottom: 4),
       height: 200,
       child: Column(
         children: <Widget>[

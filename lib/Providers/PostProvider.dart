@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class Reply{
   final reply_id;
+  final String userName;
   final String reply;
   final bool like;
   final int likes_count;
@@ -9,6 +10,7 @@ class Reply{
 
   Reply({
     this.reply_id,
+    this.userName,
     this.reply,
     this.like,
     this.likes_count,
@@ -19,6 +21,7 @@ class Reply{
 
 class Comment extends ChangeNotifier{
   final comment_id;
+  final String userName;
   final String comment;
   final bool like;
   final int likes_count;
@@ -28,6 +31,7 @@ class Comment extends ChangeNotifier{
 
   Comment({
     this.comment_id,
+    this.userName,
     this.comment,
     this.like,
     this.likes_count,
