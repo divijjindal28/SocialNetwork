@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
           child: ListView.builder(
               itemCount: 10,
               itemBuilder: (ctx,index){
-                return PostFrame();
+                return PostFrame(commentWork: true,);
 
               }
 

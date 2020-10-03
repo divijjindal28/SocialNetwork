@@ -1,15 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
+import 'package:socialmediaapp/screens/CommentScreen.dart';
 
 class CommentFrame extends StatelessWidget {
-  int index;
-  CommentFrame(this.index);
+
+  bool replyWork;
+  CommentFrame({this.replyWork = true});
 
   @override
   Widget build(BuildContext context) {
-    print("index    "+ index.toString());
-    return 
+    void reply(){
+      Navigator.of(context).pushNamed(CommentScreen.route);
+
+    }
+    return
         Card(
           child: InkWell(
             onTap: null,
@@ -40,7 +45,9 @@ class CommentFrame extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             feedbackRow(Icon(Icons.favorite_border), null,'likes', 7),
-                            feedbackRow(Icon(Icons.comment), null,'replies', 7),
+                            feedbackRow(Icon(Icons.comment),
+                                replyWork ? reply :null
+                                ,'replies', 7),
                           ],
                         )
                     ),
@@ -58,7 +65,7 @@ class CommentFrame extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: icon,
-          onPressed: null,
+          onPressed: function,
         ),
         Text(count.toString() +"  " +label, style: TextStyle(color: Colors.grey)),
         //Text(count.toString(), style: TextStyle(color: Colors.grey))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/screens/AccountScreen.dart';
+import 'package:socialmediaapp/screens/CommentScreen.dart';
 import 'package:socialmediaapp/screens/HomeScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/SearchScreen.dart';
@@ -22,7 +23,7 @@ class _tabs_screenState extends State<TabScreen> {
     pages =[
 
       {'page':HomeScreen(),'title':'Home'},
-      {'page':PostScreen(),'title':'Search'},
+      {'page':CommentScreen(),'title':'Search'},
       {'page':UserScreen(),'title':'Accout'}
 
     ];

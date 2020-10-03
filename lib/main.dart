@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/CommentScreen.dart';
+import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/TabScreen.dart';
 
 void main() => runApp(MyApp());
@@ -24,6 +26,10 @@ class MyApp extends StatelessWidget {
           )
       ),
       home: TabScreen(),
+      routes: {
+        PostScreen.route :(_) => PostScreen(),
+        CommentScreen.route :(_) => CommentScreen(),
+      },
 
     );
   }

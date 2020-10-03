@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 
 class SendText extends StatefulWidget {
+  int type;
+  String text;
+  SendText(this.text,this.type);
   @override
   _SendTextState createState() => _SendTextState();
 }
 
 class _SendTextState extends State<SendText> {
+
+
   void _onMessageSend()async{
     FocusScope.of(context).unfocus();
 
@@ -29,7 +34,7 @@ class _SendTextState extends State<SendText> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   controller: _controller,
-                  decoration: InputDecoration(labelText: 'Type Comment '),
+                  decoration: InputDecoration(labelText: widget.text),
                   onChanged: (value){
                     setState(() {
                       messages = value;

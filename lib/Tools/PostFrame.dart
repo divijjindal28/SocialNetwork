@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/PostScreen.dart';
 
 class PostFrame extends StatelessWidget {
   bool commentWork;
   PostFrame({this.commentWork = true});
   @override
   Widget build(BuildContext context) {
+
+    void comment()
+    {
+      Navigator.of(context).pushNamed(PostScreen.route);
+    }
 
     return Card(
 
@@ -37,7 +43,7 @@ class PostFrame extends StatelessWidget {
                           342),
                       feedbackRow(
                           const Icon(Icons.mode_comment, color: Colors.grey),
-                          commentWork ? null : null,
+                          commentWork ? comment : null,
                           5),
                       feedbackRow(
                           const Icon(Icons.share, color: Colors.grey), null, 16)
@@ -54,7 +60,7 @@ class PostFrame extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: icon,
-          onPressed: null,
+          onPressed: function,
         ),
         Text(count.toString(), style: TextStyle(color: Colors.grey))
       ],
