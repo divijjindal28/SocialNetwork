@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child:Icon(Icons.add),
+        child:const Icon(Icons.add),
         onPressed: (){},
       ),
       body: Center(
@@ -20,7 +20,9 @@ class HomeScreen extends StatelessWidget {
           child: ListView.builder(
               itemCount: 10,
               itemBuilder: (ctx,index){
-                return PostFrame(commentWork: true,);
+                return Card(
+                    elevation: 4,
+                    child: PostFrame(commentWork: true,));
 
               }
 

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/CustomPageTransitionBuilder.dart';
+import 'package:socialmediaapp/screens/AuthScreen.dart';
+import 'package:socialmediaapp/screens/ChatScreen.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
+import 'package:socialmediaapp/screens/ImageScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
+import 'package:socialmediaapp/screens/SearchScreen.dart';
 import 'package:socialmediaapp/screens/TabScreen.dart';
+import 'package:socialmediaapp/screens/UserScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Social Network',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch:Colors.pink,
+          primarySwatch:Colors.purple,
           accentColor: Colors.deepPurple,
           accentColorBrightness: Brightness.dark,
           buttonTheme: ButtonTheme.of(context).copyWith(
@@ -23,12 +29,20 @@ class MyApp extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
               )
-          )
+          ),
+          pageTransitionsTheme: PageTransitionsTheme( builders: {
+            TargetPlatform.android:CustomPageTransitionBuilder(),
+            TargetPlatform.iOS:CustomPageTransitionBuilder()
+          })
       ),
       home: TabScreen(),
       routes: {
+        //SearchScreen.route :(_) => SearchScreen(),
+        //ChatScreen.route :(_) => ChatScreen(),
+        ImageScreen.route :(_) => ImageScreen(),
         PostScreen.route :(_) => PostScreen(),
         CommentScreen.route :(_) => CommentScreen(),
+        UserScreen.route :(_) => UserScreen(),
       },
 
     );

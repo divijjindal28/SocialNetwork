@@ -1,29 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/ImageScreen.dart';
 
 class UserDescription extends StatelessWidget {
+  final bool currentUser ;
+  UserDescription({this.currentUser = false});
   @override
   Widget build(BuildContext context) {
     return Container(
       margin:const EdgeInsets.only(bottom: 4),
-      height: 200,
+      constraints: BoxConstraints(
+        maxHeight: 240
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
 
             Row(
 
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
+                
                 Flexible(
                   fit: FlexFit.tight,
                   flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      maxRadius: 60,
-                      //should be image
+                    child:
+                        Hero(
+                          tag: 1,
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.of(context).pushNamed(ImageScreen.route);
+                            },
+                            child: CircleAvatar(
+                              child: Text('Add Image',style: TextStyle(color: Colors.white),),
+                              backgroundColor: Colors.grey,
+                              maxRadius: 70,
 
-                    ),
+                              //should be image
+
+                            ),
+                          ),
+                        ),
+
                   ),
                 ),
                 Flexible(
@@ -32,9 +51,13 @@ class UserDescription extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      FittedBox(
-                          child: const Text("Divij Jindal",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
-                      SizedBox(height: 20,),
+
+
+                          FittedBox(
+                              child:  Text("Divij Jindal",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
+
+
+                      const SizedBox(height: 20,),
                       Column(
                         children: <Widget>[
                           const Text("Followers" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
@@ -60,13 +83,13 @@ class UserDescription extends StatelessWidget {
               Expanded(
 
                 child: RaisedButton(
-                  child: Text("Follow"),
+                  child: Text(currentUser?'LogOut': "Follow"),
                   onPressed: (){},
                 ),
               ),
               SizedBox(width: 10,),
 
-              Expanded(
+              currentUser?Container(): Expanded(
                 child: RaisedButton(
                   child: Text("Messege"),
                   onPressed: (){},

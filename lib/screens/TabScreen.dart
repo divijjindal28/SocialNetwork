@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/screens/AccountScreen.dart';
+import 'package:socialmediaapp/screens/ChatScreen.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
 import 'package:socialmediaapp/screens/HomeScreen.dart';
+import 'package:socialmediaapp/screens/NotificationScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/SearchScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
@@ -23,8 +25,10 @@ class _tabs_screenState extends State<TabScreen> {
     pages =[
 
       {'page':HomeScreen(),'title':'Home'},
-      {'page':CommentScreen(),'title':'Search'},
-      {'page':UserScreen(),'title':'Accout'}
+      {'page':SearchScreen(),'title':'Search'},
+      {'page':NotificationScreen(),'title':'Notification'},
+      {'page':UserScreen(),'title':'Accout'},
+      {'page':ChatScreen(),'title':'Chat'},
 
     ];
 
@@ -53,17 +57,25 @@ class _tabs_screenState extends State<TabScreen> {
         currentIndex: selectedPageIndex,
         items: [
           const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
+            icon:const Icon(Icons.home),
+            label:'Home',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
+            icon:const Icon(Icons.search),
+            label:'Search',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Account'),
-          )
+            icon:const Icon(Icons.notifications_none),
+            label:'Notify',
+          ),
+          const BottomNavigationBarItem(
+            icon:const Icon(Icons.account_circle),
+            label:'Account',
+          ),
+          const BottomNavigationBarItem(
+            icon:const Icon(Icons.chat_bubble_outline),
+            label:'Chat',
+          ),
         ],
       ),
 

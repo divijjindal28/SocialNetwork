@@ -22,27 +22,30 @@ class CommentScreen extends StatelessWidget {
           width: width > 500 ? 500 : double.infinity,
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
 
-            child: ListView.builder(
-                itemCount: 4 +1,
+            child: Card(
+              elevation: 1,
+              child: ListView.builder(
+                  itemCount: 4 +1,
 
-                itemBuilder: (ctx, index) {
-                  if(index == 0  ){
-                    return Column(
-                      children: <Widget>[
-                        CommentFrame(replyWork: false,),
-                        SendText('Type Reply',1)
-                      ],
-                    );
+                  itemBuilder: (ctx, index) {
+                    if(index == 0  ){
+                      return Column(
+                        children: <Widget>[
+                          CommentFrame(replyWork: false,),
+                          SendText('Type Reply',1)
+                        ],
+                      );
 
+                    }
+
+
+
+                    index =index-1;
+
+
+                    return ReplyFrame();
                   }
-
-
-
-                  index =index-1;
-
-
-                  return ReplyFrame();
-                }
+              ),
             ),
 
         ),

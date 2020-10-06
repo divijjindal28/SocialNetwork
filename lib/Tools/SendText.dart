@@ -21,32 +21,51 @@ class _SendTextState extends State<SendText> {
   var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10)
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(labelText: widget.text),
-                  onChanged: (value){
-                    setState(() {
-                      messages = value;
-                    });
-                  },
-                ),
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
 
-            ),
-            IconButton(icon: Icon(Icons.send), onPressed: _onMessageSend)
-          ],
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: Theme.of(context).accentColor,
+            width: 2
+          ),
+          borderRadius: BorderRadius.all(
+              Radius.circular(25.0) //
+          ),
         ),
+
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: TextFormField(
+
+                    controller: _controller,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding:
+                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                        hintText: 'Type Comment'),
+
+                    onChanged: (value){
+                      setState(() {
+                        messages = value;
+                      });
+                    },
+                  ),
+                ),
+
+              ),
+              IconButton(icon:const Icon(Icons.send,size: 25,), onPressed: _onMessageSend)
+            ],
+          ),
+
       ),
     );
   }

@@ -3,6 +3,8 @@ import 'package:socialmediaapp/Tools/PostFrame.dart';
 import 'package:socialmediaapp/Tools/UserDescription.dart';
 
 class UserScreen extends StatelessWidget {
+  static const route = './userScreen';
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -21,7 +23,9 @@ class UserScreen extends StatelessWidget {
                     return UserDescription();
                   }
                   index =index-1;
-                  return PostFrame();
+                  return Card(
+                      elevation: 4,
+                      child: PostFrame());
 
                 }
 

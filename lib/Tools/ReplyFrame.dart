@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
+import 'package:socialmediaapp/screens/UserScreen.dart';
 
 class ReplyFrame extends StatelessWidget {
 
@@ -8,36 +9,38 @@ class ReplyFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      Card(
-        child:  Padding(
-            padding: EdgeInsets.all(5),
+      Padding(
+            padding:const EdgeInsets.all(5),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(2),
+                  GestureDetector(
+                    onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route);}
+          ,
+                    child: Padding(
+                      padding:const EdgeInsets.all(2),
 
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('UserName', style: TextStyle(
-                            fontWeight: FontWeight.bold),),
-                      ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('UserName', style: TextStyle(
+                              fontWeight: FontWeight.bold),),
+                        ),
 
+                    ),
                   ),
 
                    Padding(
-                      padding: EdgeInsets.all(2),
+                      padding:const EdgeInsets.all(2),
                       child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ', style: TextStyle(
                       ),),
                     ),
 
-                  feedbackRow(Icon(Icons.favorite_border), null,'likes', 7),
+                  feedbackRow(const Icon(Icons.favorite_border), null,'likes', 7),
                 ],
               ),
             )
-        ),
-      );
+        );
 
 
   }
