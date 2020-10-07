@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Tools/PostFrame.dart';
+import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child:const Icon(Icons.add),
-        onPressed: (){},
+        onPressed: (){
+          Navigator.of(context).pushNamed(AddAndEditPost.route);
+        },
       ),
       body: Center(
         child: Container(

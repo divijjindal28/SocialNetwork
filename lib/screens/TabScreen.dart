@@ -27,7 +27,7 @@ class _tabs_screenState extends State<TabScreen> {
       {'page':HomeScreen(),'title':'Home'},
       {'page':SearchScreen(),'title':'Search'},
       {'page':NotificationScreen(),'title':'Notification'},
-      {'page':UserScreen(),'title':'Accout'},
+      {'page':AccountScreen(),'title':'Accout'},
       {'page':ChatScreen(),'title':'Chat'},
 
     ];
