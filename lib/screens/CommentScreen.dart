@@ -17,6 +17,9 @@ class CommentScreen extends StatelessWidget {
 
 
     return Scaffold(
+      appBar: AppBar(
+        title:Text('Comment')
+      ),
       body: Center(
         child: Container(
           width: width > 500 ? 500 : double.infinity,

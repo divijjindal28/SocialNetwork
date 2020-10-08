@@ -9,38 +9,43 @@ class ReplyFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      Padding(
-            padding:const EdgeInsets.all(5),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route);}
-          ,
-                    child: Padding(
-                      padding:const EdgeInsets.all(2),
+      Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route);}
+              ,
+                        child: Padding(
+                          padding:const EdgeInsets.all(2),
 
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('UserName', style: TextStyle(
-                              fontWeight: FontWeight.bold),),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('UserName', style: TextStyle(
+                                  fontWeight: FontWeight.bold),),
+                            ),
+
+                        ),
+                      ),
+
+                       Padding(
+                          padding:const EdgeInsets.all(2),
+                          child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ', style: TextStyle(
+                          ),),
                         ),
 
-                    ),
+                      feedbackRow(const Icon(Icons.favorite_border,color: Colors.red,), null,'likes', 7),
+                    ],
                   ),
-
-                   Padding(
-                      padding:const EdgeInsets.all(2),
-                      child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ', style: TextStyle(
-                      ),),
-                    ),
-
-                  feedbackRow(const Icon(Icons.favorite_border), null,'likes', 7),
-                ],
-              ),
-            )
-        );
+                )
+            ),
+          Divider()
+        ],
+      );
 
 
   }
@@ -51,6 +56,7 @@ class ReplyFrame extends StatelessWidget {
         IconButton(
           icon: icon,
           onPressed: null,
+
         ),
         Text(count.toString() +"  " +label, style: TextStyle(color: Colors.grey)),
         //Text(count.toString(), style: TextStyle(color: Colors.grey))

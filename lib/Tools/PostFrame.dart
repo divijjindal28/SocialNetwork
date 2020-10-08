@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 
@@ -49,7 +50,8 @@ class PostFrame extends StatelessWidget {
                     )
                   ],
                   onChanged: (value) {
-                    if (value == 'logout') {
+                    if (value == 'edit') {
+                      Navigator.of(context).pushNamed(AddAndEditPost.route);
 
                     }else
                     {

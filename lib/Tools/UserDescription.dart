@@ -30,10 +30,10 @@ class UserDescription extends StatelessWidget {
                           tag: 1,
                           child: GestureDetector(
                             onTap: (){
-                              Navigator.of(context).pushNamed(ImageScreen.route);
+                              currentUser? Navigator.of(context).pushNamed(ImageScreen.route) :null;
                             },
                             child: CircleAvatar(
-                              child: Text('Add Image',style: TextStyle(color: Colors.white),),
+                              child: Text(currentUser?'Add Image':'',style: TextStyle(color: Colors.white),),
                               backgroundColor: Colors.grey,
                               maxRadius: 70,
 

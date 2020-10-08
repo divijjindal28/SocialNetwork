@@ -11,6 +11,9 @@ class UserScreen extends StatelessWidget {
 
     return Scaffold(
 
+      appBar: AppBar(
+        title: Text('Social Network')
+      ),
       body:  Center(
 
           child: Container(

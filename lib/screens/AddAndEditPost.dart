@@ -78,7 +78,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                     ],
                   ),
                 ),
-                FlatButton(minWidth: double.infinity,onPressed: (){}, child: Text('Change Image',style: TextStyle(color: Theme.of(context).primaryColor),))
+                FlatButton(minWidth: double.infinity,onPressed: (){}, child: Text('Submit',style: TextStyle(color: Theme.of(context).primaryColor),))
 
               ],
             ),

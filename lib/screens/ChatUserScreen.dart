@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Tools/SendText.dart';
 
 
 class ChatUserScreen extends StatelessWidget {
@@ -13,8 +14,10 @@ class ChatUserScreen extends StatelessWidget {
 
       ),
       body:Column(children: <Widget>[
-        //chats(),
-        //newChat()
+        Expanded(
+          child: Container(),
+        ),
+        SendText('Send Messege ..',2)
       ],) ,
 
     );

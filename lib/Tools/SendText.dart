@@ -51,7 +51,7 @@ class _SendTextState extends State<SendText> {
                         disabledBorder: InputBorder.none,
                         contentPadding:
                         EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                        hintText: 'Type Comment'),
+                        hintText: widget.text),
 
                     onChanged: (value){
                       setState(() {
