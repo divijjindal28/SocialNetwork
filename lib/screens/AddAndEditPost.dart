@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/ImageScreen.dart';
 
 
 class AddAndEditPost extends StatefulWidget {
@@ -32,13 +33,21 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                           fit: FlexFit.tight,
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey,
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.of(context).pushNamed(ImageScreen.route);
+                              },
+                              child: Hero(
+                                tag: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey,
 
+                                  ),
+                                  child: Center(child: Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
+                                ),
                               ),
-                              child: Center(child: Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
                             ),
                           )
                       ),
