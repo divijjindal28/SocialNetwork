@@ -19,9 +19,7 @@ class NotificationScreen extends StatelessWidget {
                         return Center(child:const Text('Slide to delete Notification'));
                       }
                     index = index - 1;
-                    return Column(
-                      children: [
-                        Dismissible(
+                    return Dismissible(
 
 
                             key: ValueKey(index.toString()),
@@ -50,33 +48,36 @@ class NotificationScreen extends StatelessWidget {
                             onDismissed: (_){
 
                             },
-                            child:ListTile(
-                              leading: Hero(
-                                tag:index,
-                                child: CircleAvatar(
-                                  backgroundColor:Colors.grey ,
+                            child:Column(
+                              children: [
+                                ListTile(
+                                  leading: Hero(
+                                    tag:index,
+                                    child: CircleAvatar(
+                                      backgroundColor:Colors.grey ,
+                                    ),
+                                  ),
+                                  title:Wrap(
+                                    direction:Axis.horizontal ,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: (){Navigator.of(context).pushNamed(UserScreen.route);},
+                                          child: Text('UserName',style: TextStyle(fontWeight: FontWeight.bold),)),
+                                      Text(' has commented on your '),
+                                      GestureDetector(
+                                          onTap: (){Navigator.of(context).pushNamed(PostScreen.route);},
+                                          child:Text('your Post',style: TextStyle(fontWeight: FontWeight.bold),))
+                                    ],
+                                  ) ,
+
+
                                 ),
-                              ),
-                              title:Wrap(
-                                direction:Axis.horizontal ,
-                                children: [
-                                  GestureDetector(
-                                      onTap: (){Navigator.of(context).pushNamed(UserScreen.route);},
-                                      child: Text('UserName',style: TextStyle(fontWeight: FontWeight.bold),)),
-                                  Text(' has commented on your '),
-                                  GestureDetector(
-                                      onTap: (){Navigator.of(context).pushNamed(PostScreen.route);},
-                                      child:Text('your Post',style: TextStyle(fontWeight: FontWeight.bold),))
-                                ],
-                              ) ,
-
-
+                                Divider()
+                              ],
                             )
 
-                        ),
-                        Divider()
-                      ],
-                    );
+                        );
+
 
                   }
               ),

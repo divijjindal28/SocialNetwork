@@ -25,7 +25,7 @@ class PostScreen extends StatelessWidget {
           width: width > 500 ? 500 : double.infinity,
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
           child: Card(
-            elevation: 1,
+            elevation: 2,
             child: ListView.builder(
                     itemCount: 4 +1,
 

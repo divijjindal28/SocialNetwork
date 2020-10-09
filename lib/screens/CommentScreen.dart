@@ -26,7 +26,7 @@ class CommentScreen extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
 
             child: Card(
-              elevation: 1,
+              elevation: 2,
               child: ListView.builder(
                   itemCount: 4 +1,
 

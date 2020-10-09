@@ -6,7 +6,7 @@ class UserScreen extends StatelessWidget {
   static const route = './userScreen';
   final bool currentUser;
   final bool homeScreen;
-  UserScreen({this.currentUser = false,this.homeScreen = true});
+  UserScreen({this.currentUser = false,this.homeScreen = false});
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
