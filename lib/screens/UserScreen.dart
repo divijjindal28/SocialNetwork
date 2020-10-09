@@ -4,15 +4,17 @@ import 'package:socialmediaapp/Tools/UserDescription.dart';
 
 class UserScreen extends StatelessWidget {
   static const route = './userScreen';
-
+  final bool currentUser;
+  final bool homeScreen;
+  UserScreen({this.currentUser = false,this.homeScreen = true});
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
 
-      appBar: AppBar(
-        title: Text('Social Network')
+      appBar:homeScreen ? null : AppBar(
+        title:const Text('Social Network')
       ),
       body:  Center(
 
@@ -23,12 +25,12 @@ class UserScreen extends StatelessWidget {
                 itemCount: 10+1,
                 itemBuilder: (ctx,index){
                   if(index == 0){
-                    return UserDescription();
+                    return UserDescription(currentUser: currentUser,);
                   }
                   index =index-1;
                   return Card(
                       elevation: 4,
-                      child: PostFrame());
+                      child: PostFrame(currentUser: currentUser,));
 
                 }
 
@@ -36,15 +38,6 @@ class UserScreen extends StatelessWidget {
 
             ),
         ),
-
-
-
-
-
-
-
-
-
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Tools/SearchBar.dart';
-import 'package:socialmediaapp/screens/AccountScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 
 class SearchScreen extends StatelessWidget {

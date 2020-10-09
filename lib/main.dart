@@ -8,7 +8,6 @@ import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
-import 'package:socialmediaapp/screens/SearchScreen.dart';
 import 'package:socialmediaapp/screens/TabScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
                 textTheme: ButtonTextTheme.primary,
 
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(5)
                 )
             ),
             pageTransitionsTheme: PageTransitionsTheme( builders: {
@@ -40,8 +39,6 @@ class MyApp extends StatelessWidget {
         ),
         home: TabScreen(),
         routes: {
-          //SearchScreen.route :(_) => SearchScreen(),
-          //ChatScreen.route :(_) => ChatScreen(),
           AccountScreen.route :(_) => AccountScreen(homeScreen: false,),
           ChatUserScreen.route :(_) => ChatUserScreen(),
           AddAndEditPost.route :(_) => AddAndEditPost(),

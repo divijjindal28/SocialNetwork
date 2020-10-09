@@ -52,12 +52,8 @@ class UserDescription extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-
-
                           FittedBox(
                               child:  Text("Divij Jindal",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
-
-
                       const SizedBox(height: 20,),
                       Column(
                         children: <Widget>[

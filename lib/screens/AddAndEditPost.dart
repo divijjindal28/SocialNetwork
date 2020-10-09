@@ -44,7 +44,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                                     color: Colors.grey,
 
                                   ),
-                                  child: Center(child: Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
+                                  child: Center(child:const Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
                                 ),
 
                             ),

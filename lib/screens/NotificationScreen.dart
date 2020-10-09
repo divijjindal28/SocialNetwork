@@ -16,7 +16,7 @@ class NotificationScreen extends StatelessWidget {
                   itemBuilder: (ctx,index){
                     if(index == 0)
                       {
-                        return Center(child: Text('Slide to delete Notification'));
+                        return Center(child:const Text('Slide to delete Notification'));
                       }
                     index = index - 1;
                     return Column(
@@ -26,7 +26,7 @@ class NotificationScreen extends StatelessWidget {
 
                             key: ValueKey(index.toString()),
                             background: Container(
-                              color: Colors.white,
+                              //color: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
 
                               alignment: Alignment.centerRight,

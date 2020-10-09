@@ -14,8 +14,6 @@ class PostFrame extends StatelessWidget {
       Navigator.of(context).pushNamed(PostScreen.route);
     }
 
-
-
     return Column(
       children: <Widget>[
         Padding(
@@ -40,13 +38,13 @@ class PostFrame extends StatelessWidget {
                   ?
               DropdownButton(
 
-                  icon: Icon(Icons.more_horiz),
+                  icon:const Icon(Icons.more_horiz),
                   items: [
                     DropdownMenuItem(
-                      child:  Text('Edit'),
+                      child:const  Text('Edit'),
                       value: 'edit',
                     ),DropdownMenuItem(
-                      child:  Text('Delete'),
+                      child:const  Text('Delete'),
                       value: 'delete',
                     )
                   ],
@@ -75,19 +73,12 @@ class PostFrame extends StatelessWidget {
           ),
         ),
         FadeInImage(
-            placeholder: AssetImage('assets/loading3.gif'),
+            placeholder:const AssetImage('assets/loading3.gif'),
             image: NetworkImage('https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg'),
             fit: BoxFit.cover,
             height: 300,
             width: double.infinity,
         ),
-//        Image.network(
-//          'https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg',
-//          fit: BoxFit.cover,
-//          height: 300,
-//          width: double.infinity,
-//          //fit: BoxFit.cover,
-//        ),
         Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

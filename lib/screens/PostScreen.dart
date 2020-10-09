@@ -17,7 +17,7 @@ class PostScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('PostName'),
+        title: Text('Post Name'),
 
       ),
       body: Center(
@@ -40,12 +40,7 @@ class PostScreen extends StatelessWidget {
                         );
 
                       }
-
-
-
                       index =index-1;
-
-
                       return CommentFrame();
                     }
                 ),
