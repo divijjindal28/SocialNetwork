@@ -37,8 +37,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                               onTap: (){
                                 Navigator.of(context).pushNamed(ImageScreen.route);
                               },
-                              child: Hero(
-                                tag: 1,
+
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -47,7 +46,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                                   ),
                                   child: Center(child: Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
                                 ),
-                              ),
+
                             ),
                           )
                       ),

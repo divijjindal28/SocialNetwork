@@ -4,11 +4,18 @@ import 'package:socialmediaapp/Tools/UserDescription.dart';
 
 class AccountScreen extends StatelessWidget {
 
+  final bool homeScreen;
+  AccountScreen({this.homeScreen = true});
+  static const route = './accountScreen';
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
+
     return Scaffold(
+      appBar: homeScreen ? null : AppBar(
+        title: Text('Social Network'),
+      ),
       body: Center(
         child: Container(
           width: width > 500 ? 500 : double.infinity,

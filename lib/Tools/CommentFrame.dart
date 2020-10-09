@@ -50,7 +50,7 @@ class CommentFrame extends StatelessWidget {
                               children: <Widget>[
                                 feedbackRow(context,
                                     Icon(Icons.favorite_border,color: Colors.red),
-                                    reply,
+                                    null,
                                     Text('7' +"  " +'likes', style: TextStyle(color:Colors.grey))),
                                 feedbackRow(context, Icon(Icons.comment,color: Theme.of(context).accentColor),
                                     replyWork ? reply :null,

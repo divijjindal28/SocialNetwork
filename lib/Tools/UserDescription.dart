@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
 
 class UserDescription extends StatelessWidget {
@@ -92,7 +93,9 @@ class UserDescription extends StatelessWidget {
               currentUser?Container(): Expanded(
                 child: RaisedButton(
                   child: Text("Messege"),
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.of(context).pushNamed(ChatUserScreen.route);
+                  },
                 ),
               ),
             ],

@@ -44,6 +44,7 @@ class NotificationScreen extends StatelessWidget {
                             // what to do after an item has been swiped away.
 
                             confirmDismiss: (direction){
+                              return Future.value(true);
                             },
 
                             onDismissed: (_){

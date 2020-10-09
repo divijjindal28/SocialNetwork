@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
@@ -73,15 +74,20 @@ class PostFrame extends StatelessWidget {
                 ' ut aliquip ex ea commodo consequat. '),
           ),
         ),
-        Image(
-          //should be Image
-          //image: null,
-          image: AssetImage('t_shirt.png'),
-          fit: BoxFit.cover,
-          height: 300,
-          width: double.infinity,
-          //fit: BoxFit.cover,
+        FadeInImage(
+            placeholder: AssetImage('assets/loading3.gif'),
+            image: NetworkImage('https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg'),
+            fit: BoxFit.cover,
+            height: 300,
+            width: double.infinity,
         ),
+//        Image.network(
+//          'https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg',
+//          fit: BoxFit.cover,
+//          height: 300,
+//          width: double.infinity,
+//          //fit: BoxFit.cover,
+//        ),
         Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
@@ -91,7 +97,7 @@ class PostFrame extends StatelessWidget {
                   null, 342),
               feedbackRow(const Icon(Icons.mode_comment, color: Colors.grey),
                   commentWork ? comment : null, 5),
-              feedbackRow(const Icon(Icons.share, color: Colors.grey), null, 16)
+              feedbackRow(const Icon(Icons.share, color: Colors.grey),null, 16)
             ],
           ),
         )

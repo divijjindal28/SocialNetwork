@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/CustomPageTransitionBuilder.dart';
+import 'package:socialmediaapp/screens/AccountScreen.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/AuthScreen.dart';
 import 'package:socialmediaapp/screens/ChatScreen.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         routes: {
           //SearchScreen.route :(_) => SearchScreen(),
           //ChatScreen.route :(_) => ChatScreen(),
+          AccountScreen.route :(_) => AccountScreen(homeScreen: false,),
           ChatUserScreen.route :(_) => ChatUserScreen(),
           AddAndEditPost.route :(_) => AddAndEditPost(),
           ImageScreen.route :(_) => ImageScreen(),
