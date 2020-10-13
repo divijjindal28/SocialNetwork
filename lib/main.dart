@@ -3,13 +3,13 @@ import 'package:socialmediaapp/CustomPageTransitionBuilder.dart';
 import 'package:socialmediaapp/screens/AccountScreen.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/AuthScreen.dart';
-import 'package:socialmediaapp/screens/ChatScreen.dart';
 import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/TabScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,7 +37,15 @@ class MyApp extends StatelessWidget {
               TargetPlatform.iOS:CustomPageTransitionBuilder()
             })
         ),
-        home: TabScreen(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.onAuthStateChanged,
+          builder: (ctx,userSnap){
+            if(userSnap.hasData){
+              return TabScreen();
+            }
+            return AuthScreen();
+          },
+        ),
         routes: {
           AccountScreen.route :(_) => AccountScreen(homeScreen: false,),
           ChatUserScreen.route :(_) => ChatUserScreen(),

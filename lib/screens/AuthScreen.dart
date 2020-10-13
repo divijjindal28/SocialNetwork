@@ -1,5 +1,12 @@
+
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 
 
 
@@ -44,12 +51,12 @@ class AuthCard extends StatefulWidget{
 class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin{
 
   var _isLoading = false;
-  var userName='';
+  String userName='';
   var email = '';
   var password='';
   var _auth_type = AuthType.LogIn;
   final _form = GlobalKey<FormState>();
-  final userNameFocus=FocusNode();
+  final _userNameFocus=FocusNode();
   final _email_focus=FocusNode();
   final _password_focus=FocusNode();
   final _confirm_password_focus=FocusNode();
@@ -70,7 +77,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    userNameFocus.dispose();
+    _userNameFocus.dispose();
     _email_focus.dispose();
     _password_focus.dispose();
     _confirm_password_focus.dispose();
@@ -84,47 +91,47 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
+    AuthResult authResult;
 
     void SaveForm() async{
-//      print("saveform");
-//      if(!_form.currentState.validate()){return;}
-//      print("saveform2");
-//      _form.currentState.save();
-//      setState(() {
-//        _isLoading = true;
-//      });
-//      try{
-//        if(_auth_type == AuthType.LogIn){
-//          print('working_login');
-//        }else{
-//          print('working');
-//
-//        }
-//      }
-//      on HttpException catch(error){
-//        String message='Authentication failed!';
-//        if(error.toString().contains("EMAIL_NOT_FOUND"))
-//        {
-//          message='Email not found.';
-//        }else if(error.toString().contains("INVALID_PASSWORD"))
-//        {
-//          message='Password is invalid.';
-//        }else if(error.toString().contains("USER_DISABLED"))
-//        {
-//          message='Sorry, your account has been disabled.';
-//        }else if(error.toString().contains("EMAIL_EXISTS"))
-//        {
-//          message='Email already exist, please sign in.';
-//        }else if(error.toString().contains("TOO_MANY_ATTEMPTS_TRY_LATER"))
-//        {
-//          message='Too many attempts , try again later.';
-//        }
-//
-//      }catch(error){
-//      }
-//      setState(() {
-//        _isLoading = false;
-//      });
+      if(!_form.currentState.validate()){return;}
+      _form.currentState.save();
+      setState(() {
+        _isLoading = true;
+      });
+      try{
+        if(_auth_type == AuthType.LogIn){
+
+          authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
+          print(authResult);
+        }else{
+          print('loging2');
+          authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+          var user = await FirebaseAuth.instance.currentUser();
+          String _token;
+          await user.getIdToken().then((result){
+            _token =result.token;
+          });
+
+
+          try{var result = await http.patch('https://socialnetwork-fa878.firebaseio.com/${authResult.user.uid}.json?auth=$_token',body:json.encode(
+            {'userName' : userName}
+          ));
+
+         print('RESULT   :'+json.decode(result.body).toString());
+          }catch(error){print('ERROR  :' + error.toString());}
+
+        }
+      }on PlatformException catch(error){
+        var messege  = 'Something went wrong, try after sometime.';
+        if(error.message!=null)
+          messege = error.message;
+        MessegeBox.ShowError(context: context,msg:messege,intent: 'ERROR');
+      }
+      setState(() {
+        _isLoading = false;
+      });
     }
 
     final deviceSize = MediaQuery.of(context).size;
@@ -143,7 +150,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
         child: AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.linear,
-          height:_auth_type == AuthType.SignUp ? 400: 270 ,
+          height:_auth_type == AuthType.SignUp ? 430: 300 ,
           child: Card(
               margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 30),
               shape: RoundedRectangleBorder(
@@ -171,7 +178,8 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                               decoration: InputDecoration(
                                   labelText: 'User Name',
                               ),
-                              focusNode: userNameFocus,
+                              focusNode: _userNameFocus,
+                              key: ValueKey('userName'),
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_){
                                 FocusScope.of(context).requestFocus(_email_focus);
@@ -179,12 +187,19 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                               },
 
                               validator: (value){
-                                return "Please enter the password";
+                                if(_auth_type == AuthType.SignUp) {
+                                  if (value.isEmpty) {
+                                    return "Please enter the password";
+                                  }
+                                  return null;
+                                }else{
+                                  return null;
+                                }
 
                               },
                               onSaved: (value){
                                 if(_auth_type == AuthType.SignUp)
-                                  userName = value;
+                                  userName = value.trim();
 
                               },
                             ),
@@ -196,6 +211,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                           labelText: 'Email id',
                         ),
                         focusNode: _email_focus,
+                        key: ValueKey('email'),
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
                         onFieldSubmitted: (_){
@@ -210,7 +226,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
                         },
                         onSaved: (value){
-                          email = value;
+                          email = value.trim();
 
                         },
 
@@ -220,6 +236,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                             labelText: 'Password',
                         ),
                         focusNode: _password_focus,
+                        key: ValueKey('password'),
                         textInputAction: TextInputAction.next,
                         controller: _password_controller,
                         obscureText: true,
@@ -235,7 +252,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
                         },
                         onSaved: (value){
-                          password = value;
+                          password = value.trim();
 
                         },
                       ),
@@ -257,6 +274,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                                   labelText: 'Confirm Password',
                               ),
                               focusNode: _confirm_password_focus,
+                              key: ValueKey('confirmPassword'),
                               textInputAction: TextInputAction.done,
                               obscureText: true,
                               onFieldSubmitted: (_){
@@ -276,7 +294,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                               },
                               onSaved: (value){
                                 if(_auth_type == AuthType.SignUp)
-                                  password = value;
+                                  password = value.trim();
 
                               },
                             ),
@@ -294,12 +312,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
                           padding: const EdgeInsets.all(8.0),
                           child: Text(_auth_type == AuthType.SignUp ? "SignUp" : "LogIn",style:TextStyle(color:Colors.white,fontSize: 15),),
                         ),
-                        onPressed: (){
-                          SaveForm();
-
-                        },
-
-
+                        onPressed: SaveForm,
                       ),
                       FlatButton(
 

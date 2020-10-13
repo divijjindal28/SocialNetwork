@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+
 
 class Reply{
   final reply_id;
@@ -45,8 +49,6 @@ class Comment extends ChangeNotifier{
 
 class Post extends ChangeNotifier{
   final post_id;
-  final user_id;
-  final String name;
   final String description;
   final String image_url;
   final bool like;
@@ -58,15 +60,13 @@ class Post extends ChangeNotifier{
   Post({
 
     @required this.post_id,
-    @required this.user_id,
-    @required this.name,
     @required this.description,
     @required this.image_url,
-    @required this.likes_count,
-    @required this.comments_count,
-    @required this.shares_count,
-    @required this.like,
-    this.comment_list,
+    this.likes_count = 0,
+    this.comments_count = 0,
+    this.shares_count = 0,
+    this.like = false,
+    this.comment_list = null,
     @required this.time,
   });
 
@@ -91,4 +91,12 @@ class PostProvider extends ChangeNotifier{
   final List<Post> _posts = null;
   final List<TimeLinePost> _timeleinePostsDetails = null;
   final List<Post> _TimelinePosts = null;
+
+  Future<void> addPost(String description,String imageUrl,String userId){
+    http.post('https://socialnetwork-fa878.firebaseio.com/'+userId+'my_posts/'+'',body: json.encode({
+      'description' : description,
+      'imageUrl' : imageUrl,
+      'time' : DateTime.now().toIso8601String()
+    }));
+  }
 }

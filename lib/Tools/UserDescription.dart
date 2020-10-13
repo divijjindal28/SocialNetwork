@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class UserDescription extends StatelessWidget {
   final bool currentUser ;
@@ -81,7 +84,12 @@ class UserDescription extends StatelessWidget {
 
                 child: RaisedButton(
                   child: Text(currentUser?'LogOut': "Follow"),
-                  onPressed: (){},
+                  onPressed: (){
+                    currentUser ?
+                     logOut(context):
+
+                        null;
+                  },
                 ),
               ),
               SizedBox(width: 10,),
@@ -100,5 +108,27 @@ class UserDescription extends StatelessWidget {
 
       ),
     );
+  }
+
+  Future logOut(BuildContext context) {
+    return showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Center(child: Text('Logout')),
+                        content: Text("Do you want to logOut?"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Yes'),
+                            onPressed:() {
+                              FirebaseAuth.instance.signOut();
+                              Navigator.of(ctx).pop();},
+                          ),
+                          FlatButton(
+                            child: Text('No'),
+                            onPressed:() => Navigator.of(ctx).pop(),
+                          )
+                        ],
+                      )
+                  );
   }
 }
