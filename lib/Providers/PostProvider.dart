@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 
 
 class Reply{
@@ -49,6 +51,8 @@ class Comment extends ChangeNotifier{
 
 class Post extends ChangeNotifier{
   final post_id;
+  final String userName;
+  final String userId;
   final String description;
   final String image_url;
   final bool like;
@@ -60,6 +64,8 @@ class Post extends ChangeNotifier{
   Post({
 
     @required this.post_id,
+    @required this.userName,
+    @required this.userId,
     @required this.description,
     @required this.image_url,
     this.likes_count = 0,
@@ -88,15 +94,41 @@ class TimeLinePost{
 }
 
 class PostProvider extends ChangeNotifier{
-  final List<Post> _posts = null;
-  final List<TimeLinePost> _timeleinePostsDetails = null;
-  final List<Post> _TimelinePosts = null;
+  final List<Post> _myPosts = null;
+  //final List<TimeLinePost> _timeleinePostsDetails = null;
+  final List<TimeLinePost> _myTimeLinePosts = null;
 
-  Future<void> addPost(String description,String imageUrl,String userId){
-    http.post('https://socialnetwork-fa878.firebaseio.com/'+userId+'my_posts/'+'',body: json.encode({
+  Future<void> addPost(String description,String imageUrl) async{
+
+    try{
+
+//      var user = await FirebaseAuth.instance.currentUser();
+//      String _userId = await user.uid;
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+
+      final response = await http.post('https://socialnetwork-fa878.firebaseio.com/posts.json?auth=$_tokenId',body: json.encode({
+      'userName': _userName,
+      'userId': _userId,
       'description' : description,
       'imageUrl' : imageUrl,
       'time' : DateTime.now().toIso8601String()
     }));
+      var _newPost = Post(
+        time: DateTime.now(),
+        userId: _userId,
+        userName: _userName,
+        description: description,
+        image_url: imageUrl,
+        post_id: json.decode(response.body)['name'].toString()
+      );
+      _myPosts.insert(0, _newPost);
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw err;
+    }
   }
 }

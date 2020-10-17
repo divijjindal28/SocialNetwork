@@ -1,4 +1,5 @@
 
+import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
 
@@ -38,4 +39,43 @@ class MessegeBox {
         )
     );
   }
+
+   static Future<String> takeImage(BuildContext context) async {
+     bool camera = true;
+     try{await showDialog(
+         context: context,
+         builder: (ctx) => AlertDialog(
+           title: Center(child: Text("Take Image")),
+           content: Text("Please select the way you want to take image"),
+           actions: <Widget>[
+             Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 FlatButton(
+                   child: Text('Camera'),
+                   onPressed:(){camera = true;Navigator.of(ctx).pop();},
+                 ),
+                 FlatButton(
+                   child: Text('Gallery'),
+                   onPressed:() {camera = false;Navigator.of(ctx).pop();},
+                 )
+               ],
+             )
+
+           ],
+         )
+     );
+     var _myimage = await ImagePicker().getImage(source:camera? ImageSource.camera:ImageSource.gallery,
+         //imageQuality: 50,
+         maxWidth: 500
+     );
+
+     return _myimage.path;
+     }
+     catch(err){
+       await ShowError(context: context,intent: 'ERROR');
+     }
+
+
+   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/screens/ChatScreen.dart';
 import 'package:socialmediaapp/screens/HomeScreen.dart';
 import 'package:socialmediaapp/screens/NotificationScreen.dart';
@@ -42,6 +43,8 @@ class _tabs_screenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('hello');
+    UserProvider.getUserInfo();
     // TODO: implement build
     return Scaffold(
 
