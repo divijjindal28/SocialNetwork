@@ -25,40 +25,6 @@ class _ImageScreenState extends State<ImageScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    Future<String> getImageUrl()async{
-      setState(() {
-        widget._loading  = true;
-      });
-
-      //var user = await FirebaseAuth.instance.currentUser();
-      //String _userId = await user.uid;
-      String _userId = UserProvider.mainUser.userId;
-
-
-      String imagePath = '';
-      imagePath = await MessegeBox.takeImage(context);
-
-//      setState(() {
-//        widget._image = File(imagePath);
-//      });
-
-      String url = '';
-      try{
-        final ref =  FirebaseStorage.instance.ref().child('post_image').child(_userId +'-'+DateTime.now().toIso8601String()+ ".jpg");
-        await ref.putFile(widget._image).onComplete;
-        url = await ref.getDownloadURL();
-      }on PlatformException catch(error){
-        var messege  = 'Something went wrong, try after sometime.';
-        if(error.message!=null)
-          messege = error.message;
-        MessegeBox.ShowError(context: context,msg:messege,intent: 'ERROR');
-      }
-
-      setState(() {
-        widget._loading  = false;
-      });
-      return url;
-    }
 
     return Scaffold(
       appBar: AppBar(
