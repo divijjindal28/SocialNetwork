@@ -16,7 +16,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child:const Icon(Icons.add),
-        onPressed: (){Navigator.of(context).pushNamed(AddAndEditPost.route);},
+        onPressed: ()async{
+          var _result = await Navigator.of(context).pushNamed(AddAndEditPost.route);
+          _result == true ?
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post added',style: TextStyle(color: Colors.white),),backgroundColor: Theme.of(context).primaryColor,)) :
+              Scaffold.of(context).showSnackBar(SnackBar(content:  Text('Post could not be added',style: TextStyle(color: Colors.white)),backgroundColor: Theme.of(context).primaryColor,));
+          },
       ),
       body: Center(
         child: Container(

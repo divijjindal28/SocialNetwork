@@ -13,6 +13,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class AddAndEditPost extends StatefulWidget {
   static const route  = './addandeditscreen';
+  String _imagePath = null;
+  bool _loading = false;
   String networkImage = '';
   String description = '';
   TextEditingController descriptionController = TextEditingController();
@@ -54,8 +56,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                               onTap: ()async{
                                 final result =await  Navigator.of(context).pushNamed(ImageScreen.route);
                                 setState(() {
-                                  widget.networkImage = result;
-                                  print("qwe"+widget.networkImage);
+                                  widget._imagePath = result;
                                 });
                               },
 
@@ -66,8 +67,9 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
 
                                   ),
                                   //child: Center(child:const Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
-                                  child:widget.networkImage == '' ? Center(child: Text('+ Add Image',style: TextStyle(color: Colors.white,fontSize: 20),),):Image(
-                                    image: NetworkImage(widget.networkImage),
+                                  child:widget._imagePath == null ? Center(child: Text('+ Add Image',style: TextStyle(color: Colors.white,fontSize: 20),),):
+                                  Image(
+                                    image: FileImage(File(widget._imagePath)),
                                     fit: BoxFit.contain,
                                   )
                                 ),
@@ -106,13 +108,24 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                     ],
                   ),
                 ),
+                widget._loading ?
+                Center(
+                  child: CircularProgressIndicator(),
+                ):
                 FlatButton(
                     minWidth: double.infinity,
                     onPressed:() async{
-                      try{await _postProvider.addPost(widget.descriptionController.text, widget.networkImage);
-                      Navigator.of(context).pop();
+                      setState(() {
+                        widget._loading = true;
+                      });
+                      try{
+                        await _postProvider.addPost(widget.descriptionController.text, widget._imagePath);
+                        Navigator.of(context).pop(true);
                       }
-                      catch(error){print('post_error' + error.toString());}
+                      catch(error){
+                        MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');
+                        Navigator.of(context).pop(false);
+                      }
                     },
                     child: Text(
                       'Submit',

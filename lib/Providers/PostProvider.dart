@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 class Reply{
@@ -94,19 +97,29 @@ class TimeLinePost{
 }
 
 class PostProvider extends ChangeNotifier{
-  final List<Post> _myPosts = null;
+  final List<Post> _myPosts = [];
   //final List<TimeLinePost> _timeleinePostsDetails = null;
   final List<TimeLinePost> _myTimeLinePosts = null;
 
-  Future<void> addPost(String description,String imageUrl) async{
+  Future<void> addPost(String description,String imagePath,) async{
 
-    try{
-
-//      var user = await FirebaseAuth.instance.currentUser();
-//      String _userId = await user.uid;
     String _userId = UserProvider.mainUser.userId;
     String _tokenId = UserProvider.mainUser.tokenId;
     String _userName = UserProvider.mainUser.userName;
+    String imageUrl;
+    try{
+      final ref =  FirebaseStorage.instance.ref().child('post_image').child(_userId +'-'+DateTime.now().toIso8601String()+ ".jpg");
+      await ref.putFile(File(imagePath)).onComplete;
+      imageUrl = await ref.getDownloadURL();
+    }on PlatformException catch(error){
+      var messege  = 'Something went wrong, try after sometime.';
+      if(error.message!=null)
+        messege = error.message;
+      throw HttpException(messege);
+    }
+
+    try{
+
 
       final response = await http.post('https://socialnetwork-fa878.firebaseio.com/posts.json?auth=$_tokenId',body: json.encode({
       'userName': _userName,
@@ -128,7 +141,7 @@ class PostProvider extends ChangeNotifier{
       notifyListeners();
 
     }catch(err){
-      throw err;
+      throw HttpException("Something went wrong , Please try again.");
     }
   }
 }

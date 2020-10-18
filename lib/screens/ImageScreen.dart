@@ -13,6 +13,7 @@ class ImageScreen extends StatefulWidget {
   static const route  = './imageScreen';
   bool _loading = false;
   File _image;
+  String _imagePath = null;
   String networkImageUrl = '';
   String assetImageUrl = 'assets/add.png';
   @override
@@ -37,9 +38,9 @@ class _ImageScreenState extends State<ImageScreen> {
       String imagePath = '';
       imagePath = await MessegeBox.takeImage(context);
 
-      setState(() {
-        widget._image = File(imagePath);
-      });
+//      setState(() {
+//        widget._image = File(imagePath);
+//      });
 
       String url = '';
       try{
@@ -79,21 +80,24 @@ class _ImageScreenState extends State<ImageScreen> {
                     height: 500,
                     child: GestureDetector(
                       onTap: ()async{
+                          widget._imagePath = await MessegeBox.takeImage(context);
+                        setState(() {
 
+                        });
 
-                        widget.networkImageUrl = await getImageUrl();
-                        print("bnv"+widget.networkImageUrl);
 
                       },
                       child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.grey,
-
                           ),
-                          //child: Center(child:const Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
-                          child:widget.networkImageUrl == '' ?  Center(child: Text('+ Add Image',style: TextStyle(color: Colors.white,fontSize: 20),),): Image(
-                            image: NetworkImage(widget.networkImageUrl),
+
+                          child:widget._imagePath == null ?
+                          Center(child: Text('+ Add Image',style: TextStyle(color: Colors.white,fontSize: 20),),):
+                          Image(
+
+                            image: FileImage(File(widget._imagePath)),
                             fit: BoxFit.contain,
                           )
                       ),
@@ -102,7 +106,7 @@ class _ImageScreenState extends State<ImageScreen> {
                       ),
                 ),
               ),
-              FlatButton(minWidth: double.infinity,onPressed: (){Navigator.of(context).pop(widget.networkImageUrl);}, child: Text('Change Image',style: TextStyle(color: Theme.of(context).primaryColor),))
+              FlatButton(minWidth: double.infinity,onPressed: (){Navigator.of(context).pop(widget._imagePath);}, child: Text('Change Image',style: TextStyle(color: Theme.of(context).primaryColor),))
             ],
           ),
         ),
