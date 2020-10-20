@@ -56,8 +56,8 @@ class Post extends ChangeNotifier{
   final post_id;
   final String userName;
   final String userId;
-  final String description;
-  final String image_url;
+   String description;
+   String image_url;
   final bool like;
   final int likes_count;
   final int comments_count;
@@ -79,6 +79,50 @@ class Post extends ChangeNotifier{
     @required this.time,
   });
 
+  Future<void> updatePost(String postId,String description,String imagePath,) async{
+
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+    String imageUrl;
+    if(imagePath.contains('http')){
+      imageUrl = imagePath;
+    }else {
+      try {
+        final ref = FirebaseStorage.instance.ref().child('post_image1').child(
+            _userId + '-' + DateTime.now().toIso8601String() + ".jpg");
+        await ref
+            .putFile(File(imagePath))
+            .onComplete;
+        imageUrl = await ref.getDownloadURL();
+      } on PlatformException catch (error) {
+        var messege = 'Something went wrong, try after sometime.';
+        if (error.message != null)
+          messege = error.message;
+        throw HttpException(messege);
+      }
+    }
+    try{
+      final response = await http.patch('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId',body: json.encode({
+        'description' : description,
+        'imageUrl' : imageUrl,
+      }));
+      if(response.statusCode > 400)
+        {
+          throw HttpException("Something went wrong , Please try again.");
+        }
+      else {
+        this.description = description;
+        this.image_url = imageUrl;
+      }
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
+
 }
 
 class TimeLinePost{
@@ -97,9 +141,14 @@ class TimeLinePost{
 }
 
 class PostProvider extends ChangeNotifier{
-  final List<Post> _myPosts = [];
+  List<Post> _myPosts = [];
   //final List<TimeLinePost> _timeleinePostsDetails = null;
   final List<TimeLinePost> _myTimeLinePosts = null;
+
+   List<Post> get getMyPost{
+     _myPosts.sort((a,b) => b.time.compareTo(a.time));
+    return _myPosts;
+  }
 
   Future<void> addPost(String description,String imagePath,) async{
 
@@ -144,4 +193,108 @@ class PostProvider extends ChangeNotifier{
       throw HttpException("Something went wrong , Please try again.");
     }
   }
+
+  Future<List<Post>> getPost() async{
+
+    _myPosts = [];
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+    String _userId = UserProvider.mainUser.userId;
+    String imageUrl;
+
+    try{
+      final response = await http.get('https://socialnetwork-fa878.firebaseio.com/posts.json?auth=$_tokenId&orderBy="userId"&equalTo="$_userId"');
+      var extractedData = json.decode(response.body) as Map<String,dynamic>;
+      print("edata"+extractedData.toString());
+      if(extractedData == null) {
+        print("edata"+extractedData.toString());
+        throw HttpException("Something went wrong , Please try again.1111");
+      }
+      if(extractedData['error'] != null) {
+        print("xc1"+ extractedData['error']);
+        throw HttpException("Something went wrong , Please try again2222." +
+            extractedData['error'].toString());
+      }
+      extractedData.forEach((key, value) {
+        var _newPost = Post(
+            time:DateTime.parse(value['time']),
+            userId: value['userId'],
+            userName: value['userName'],
+            description: value['description'],
+            image_url: value['imageUrl'],
+            post_id: key
+        );
+        _myPosts.insert(0, _newPost);
+      });
+
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again."+err.toString());
+    }
+  }
+
+  Future<void> updatePost(String postId,String description,String imagePath,) async{
+
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+    String imageUrl;
+    if(imagePath.contains('http')){
+      imageUrl = imagePath;
+    }else {
+      try {
+        final ref = FirebaseStorage.instance.ref().child('post_image').child(
+            _userId + '-' + DateTime.now().toIso8601String() + ".jpg");
+        await ref
+            .putFile(File(imagePath))
+            .onComplete;
+        imageUrl = await ref.getDownloadURL();
+      } on PlatformException catch (error) {
+        var messege = 'Something went wrong, try after sometime.';
+        if (error.message != null)
+          messege = error.message;
+        throw HttpException(messege);
+      }
+    }
+    try{
+      final response = await http.patch('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId',body: json.encode({
+        'description' : description,
+        'imageUrl' : imageUrl,
+      }));
+
+      int index = _myPosts.indexOf(_myPosts.firstWhere((element) => element.post_id == postId));
+      _myPosts[index] =  Post(
+          time: _myPosts[index].time,
+          userId: _myPosts[index].userId,
+          userName: _myPosts[index].userName,
+          description: description,
+          image_url: imageUrl ,
+          post_id: _myPosts[index].post_id
+      );
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
+
+  Future<void> deletePost(String postId) async{
+
+    String _tokenId = UserProvider.mainUser.tokenId;
+
+    try{
+      final response = await http.delete('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId');
+      print("legnth:"+_myPosts.length.toString());
+      _myPosts.removeWhere((element) => element.post_id == postId);
+      print("legnth:"+_myPosts.length.toString());
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
 }
+

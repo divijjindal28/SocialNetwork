@@ -9,7 +9,7 @@ class MessegeBox {
     String title = 'Something went wrong!',
     String msg = "Please try again after sometime.",
     String intent = '',
-    Function function = null})
+    var function = null})
   {
      return showDialog(
         context: context,
@@ -26,7 +26,7 @@ class MessegeBox {
               children: [
                 FlatButton(
                   child: Text('Yes'),
-                  onPressed:(){function;Navigator.of(ctx).pop();},
+                  onPressed:()async{await function;Navigator.of(ctx).pop();},
                 ),
                 FlatButton(
                   child: Text('No'),

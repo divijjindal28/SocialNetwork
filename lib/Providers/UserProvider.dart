@@ -37,6 +37,7 @@ class UserProvider  {
     try{
       var result = await http.get('https://socialnetwork-fa878.firebaseio.com/users/${_userId}.json?auth=$_token');
       var Extractedmessege = json.decode(result.body);
+      print("bhai mere"+Extractedmessege.toString());
       mainUser = User(
         userId: _userId,
         tokenId: _token,

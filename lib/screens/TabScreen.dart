@@ -48,7 +48,21 @@ class _tabs_screenState extends State<TabScreen> {
     // TODO: implement build
     return Scaffold(
 
-      body: pages[selectedPageIndex]['page'],
+      body:
+      FutureBuilder(
+        future:UserProvider.getUserInfo(),
+        builder:( (ctx,resultSnap) {
+          if (resultSnap.connectionState == ConnectionState.waiting)
+            return Center(child: CircularProgressIndicator(),);
+          else if (resultSnap.hasError) {
+            return Center(child: Text(
+                'Could not load. Please try again.' + resultSnap.toString()));
+          }
+          else
+            return pages[selectedPageIndex]['page'];
+        }),
+        ),
+
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: Colors.white,

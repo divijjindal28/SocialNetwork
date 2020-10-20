@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Providers/PostProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
+import 'package:provider/provider.dart';
 
 class PostFrame extends StatelessWidget {
   bool commentWork;
   bool currentUser;
+  var mypost;
   PostFrame({this.commentWork = true, this.currentUser = false});
   @override
   Widget build(BuildContext context) {
     void comment() {
       Navigator.of(context).pushNamed(PostScreen.route);
     }
+    var _postProvider = Provider.of<PostProvider>(context,listen:false);
+    mypost = Provider.of<Post>(context);
 
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -29,7 +34,7 @@ class PostFrame extends StatelessWidget {
                   },
                   child: FittedBox(
                       child: Text(
-                    'Post Heading',
+                    mypost.userName,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )),
                 ),
@@ -48,12 +53,49 @@ class PostFrame extends StatelessWidget {
                       value: 'delete',
                     )
                   ],
-                  onChanged: (value) {
+                  onChanged: (value) async{
                     if (value == 'edit') {
-                      Navigator.of(context).pushNamed(AddAndEditPost.route);
+                      Navigator.of(context).pushNamed(AddAndEditPost.route,arguments: {
+                        'postId' : mypost.post_id,
+                        'imageUrl' : mypost.image_url,
+                        'description' : mypost.description,
+                        'provider':mypost
+                      });
 
                     }else
                     {
+                      try{
+                        await showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Center(child: Text("Delete Post")),
+                              content: Text("Do you really want to delete this post?"),
+                              actions: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    FlatButton(
+                                      child: Text('Yes'),
+                                      onPressed:()async{await _postProvider.deletePost(mypost.post_id);Navigator.of(ctx).pop();},
+                                    ),
+                                    FlatButton(
+                                      child: Text('No'),
+                                      onPressed:() => Navigator.of(ctx).pop(),
+                                    )
+                                  ],
+                                )
+
+                              ],
+                            )
+                        );
+
+                      }catch(err){
+                    MessegeBox.ShowError(
+                    context: context,
+                    msg: err.toString(),
+                    intent: 'ERROR');
+                    Navigator.of(context).pop(false);
+                    }
 
                     }
                   })
@@ -67,14 +109,12 @@ class PostFrame extends StatelessWidget {
             padding:
                 const EdgeInsets.only(top: 0, bottom: 15, left: 15, right: 15),
             child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut'
-                ' labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi'
-                ' ut aliquip ex ea commodo consequat. '),
+                mypost.description),
           ),
         ),
         FadeInImage(
             placeholder:const AssetImage('assets/loading3.gif'),
-            image: NetworkImage('https://cdn.pixabay.com/photo/2015/06/19/21/24/the-road-815297__340.jpg'),
+            image: NetworkImage(mypost.image_url),
             fit: BoxFit.cover,
             height: 300,
             width: double.infinity,

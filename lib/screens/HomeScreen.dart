@@ -32,7 +32,8 @@ class HomeScreen extends StatelessWidget {
               itemBuilder: (ctx,index){
                 return Card(
                     elevation: 4,
-                    child: PostFrame()
+
+                    //child: PostFrame()
                 );
               }
               ),
