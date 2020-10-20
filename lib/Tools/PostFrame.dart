@@ -56,9 +56,7 @@ class PostFrame extends StatelessWidget {
                   onChanged: (value) async{
                     if (value == 'edit') {
                       Navigator.of(context).pushNamed(AddAndEditPost.route,arguments: {
-                        'postId' : mypost.post_id,
-                        'imageUrl' : mypost.image_url,
-                        'description' : mypost.description,
+
                         'provider':mypost
                       });
 

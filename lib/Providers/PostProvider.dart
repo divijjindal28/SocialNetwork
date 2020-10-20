@@ -89,7 +89,7 @@ class Post extends ChangeNotifier{
       imageUrl = imagePath;
     }else {
       try {
-        final ref = FirebaseStorage.instance.ref().child('post_image1').child(
+        final ref = FirebaseStorage.instance.ref().child('post_image').child(
             _userId + '-' + DateTime.now().toIso8601String() + ".jpg");
         await ref
             .putFile(File(imagePath))
@@ -234,61 +234,17 @@ class PostProvider extends ChangeNotifier{
     }
   }
 
-  Future<void> updatePost(String postId,String description,String imagePath,) async{
-
-    String _userId = UserProvider.mainUser.userId;
-    String _tokenId = UserProvider.mainUser.tokenId;
-    String _userName = UserProvider.mainUser.userName;
-    String imageUrl;
-    if(imagePath.contains('http')){
-      imageUrl = imagePath;
-    }else {
-      try {
-        final ref = FirebaseStorage.instance.ref().child('post_image').child(
-            _userId + '-' + DateTime.now().toIso8601String() + ".jpg");
-        await ref
-            .putFile(File(imagePath))
-            .onComplete;
-        imageUrl = await ref.getDownloadURL();
-      } on PlatformException catch (error) {
-        var messege = 'Something went wrong, try after sometime.';
-        if (error.message != null)
-          messege = error.message;
-        throw HttpException(messege);
-      }
-    }
-    try{
-      final response = await http.patch('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId',body: json.encode({
-        'description' : description,
-        'imageUrl' : imageUrl,
-      }));
-
-      int index = _myPosts.indexOf(_myPosts.firstWhere((element) => element.post_id == postId));
-      _myPosts[index] =  Post(
-          time: _myPosts[index].time,
-          userId: _myPosts[index].userId,
-          userName: _myPosts[index].userName,
-          description: description,
-          image_url: imageUrl ,
-          post_id: _myPosts[index].post_id
-      );
-      //_myTimeLinePosts.insert(0, _newPost);
-      notifyListeners();
-
-    }catch(err){
-      throw HttpException("Something went wrong , Please try again.");
-    }
-  }
-
   Future<void> deletePost(String postId) async{
 
     String _tokenId = UserProvider.mainUser.tokenId;
 
     try{
       final response = await http.delete('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId');
-      print("legnth:"+_myPosts.length.toString());
-      _myPosts.removeWhere((element) => element.post_id == postId);
-      print("legnth:"+_myPosts.length.toString());
+
+      if(response.statusCode > 400){
+        throw HttpException("Something went wrong , Please try again.");
+      }else{
+      _myPosts.removeWhere((element) => element.post_id == postId);}
       //_myTimeLinePosts.insert(0, _newPost);
       notifyListeners();
 

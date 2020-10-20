@@ -11,7 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class AddAndEditPost extends StatefulWidget {
 
-  var _post;
+  Post _post;
   bool _init = true;
   static const route = './addScreen';
   String _imagePath;
@@ -36,11 +36,10 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
           .settings
           .arguments;
       if(arg!= null){
-
-        widget._postId = arg['postId'].toString();
-       widget.descriptionController.text = arg['description'].toString();
-       widget._imageUrl = arg['imageUrl'].toString();
         widget._post = arg['provider'];
+        widget._postId =  widget._post.post_id.toString();
+        widget.descriptionController.text =  widget._post.description.toString();
+        widget._imageUrl =  widget._post.image_url.toString();
       }
       widget._init = false;
     }
