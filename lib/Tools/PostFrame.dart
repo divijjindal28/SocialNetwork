@@ -13,11 +13,12 @@ class PostFrame extends StatelessWidget {
   PostFrame({this.commentWork = true, this.currentUser = false});
   @override
   Widget build(BuildContext context) {
-    void comment() {
-      Navigator.of(context).pushNamed(PostScreen.route);
-    }
-    var _postProvider = Provider.of<PostProvider>(context,listen:false);
+    var _postProvider = Provider.of<PostProvider>(context,listen: false);
     mypost = Provider.of<Post>(context);
+    void comment() {
+      Navigator.of(context).pushNamed(PostScreen.route,arguments: mypost);
+    }
+
 
     return Column(
       children: <Widget>[

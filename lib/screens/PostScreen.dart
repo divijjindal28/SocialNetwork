@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:socialmediaapp/Tools/CommentFrame.dart';
-import 'package:socialmediaapp/Tools/PostFrame.dart';
-import 'package:socialmediaapp/Tools/SendText.dart';
+import 'package:socialmediaapp/Providers/PostProvider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
+import 'package:socialmediaapp/Tools/PostScreenContent.dart';
+import 'package:provider/provider.dart';
 
 class PostScreen extends StatelessWidget {
 
@@ -9,44 +10,18 @@ class PostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
 
-
+    Post post=  ModalRoute.of(context).settings.arguments;
+    UserProvider.mainUser.currentPostId = post.post_id;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post Name'),
+        title: Text(post.userName),
 
       ),
-      body: Center(
-        child: Container(
-          width: width > 500 ? 500 : double.infinity,
-          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-          child: Card(
-            elevation: 2,
-            child: ListView.builder(
-                    itemCount: 4 +1,
+      body: ChangeNotifierProvider.value(
+        value: post,
 
-                    itemBuilder: (ctx, index) {
-                      if(index == 0  ){
-                        return Column(
-                          children: <Widget>[
-                            PostFrame(commentWork: false,),
-                            SendText('Type Comment',0),
-                            Divider()
-                          ],
-                        );
-
-                      }
-                      index =index-1;
-                      return CommentFrame();
-                    }
-                ),
-          ),
-
-        ),
+        child: PostScreenContent()
       ),
     );
   }

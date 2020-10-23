@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:socialmediaapp/Providers/CommentProvider.dart';
+import 'package:socialmediaapp/Providers/PostProvider.dart';
 
 
 class SendText extends StatefulWidget {
   int type;
   String text;
-  SendText(this.text,this.type);
+  String id ;
+  SendText(this.id,this.text,this.type);
   @override
   _SendTextState createState() => _SendTextState();
 }
 
 class _SendTextState extends State<SendText> {
 
-
-  void _onMessageSend()async{
-    FocusScope.of(context).unfocus();
-
-    _controller.clear();
-  }
   var messages = '';
   var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
+    void _onMessageSend()async{
+      if(widget.type==0){
+        var post = Provider.of<Post>(context,listen: false);
+        post.addComment(widget.id, _controller.text);
+
+      }else if(widget.type==1){
+        var comment = Provider.of<Comment>(context,listen: false);
+        comment.addReply(widget.id, _controller.text);
+
+      }
+
+
+      _controller.clear();
+    }
+
+
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -53,9 +68,15 @@ class _SendTextState extends State<SendText> {
                         EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
                         hintText: widget.text),
 
-                    onChanged: (value){
+                    validator:(val){
+                      if(val.isEmpty){
+                        return 'Plaese enter text';
+                      }
+                      else return null;
+                    } ,
+                    onSaved: (value){
                       setState(() {
-                        messages = value;
+                        _controller.text = value;
                       });
                     },
                   ),

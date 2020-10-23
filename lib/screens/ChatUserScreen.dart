@@ -17,7 +17,7 @@ class ChatUserScreen extends StatelessWidget {
         Expanded(
           child: Container(),
         ),
-        SendText('Send Messege ..',2)
+        SendText('','Send Messege ..',2)
       ],) ,
 
     );

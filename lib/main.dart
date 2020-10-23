@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/CustomPageTransitionBuilder.dart';
+import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/screens/AccountScreen.dart';
@@ -23,8 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: PostProvider())
-
+        ChangeNotifierProvider.value(value: PostProvider()),
+        ChangeNotifierProvider.value(value: CommentProvider()),
       ],
       child: MaterialApp(
           title: 'Social Network',
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
             ChatUserScreen.route :(_) => ChatUserScreen(),
             AddAndEditPost.route :(_) => AddAndEditPost(),
             ImageScreen.route :(_) => ImageScreen(),
-            PostScreen.route :(_) => PostScreen(),
+            PostScreen.route :(_) =>  PostScreen(),
             CommentScreen.route :(_) => CommentScreen(),
             UserScreen.route :(_) => UserScreen(),
 

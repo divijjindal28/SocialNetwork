@@ -5,52 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-
-class Reply{
-  final reply_id;
-  final String userName;
-  final String reply;
-  final bool like;
-  final int likes_count;
-  final DateTime time;
-
-  Reply({
-    this.reply_id,
-    this.userName,
-    this.reply,
-    this.like,
-    this.likes_count,
-    this.time
-  }
-      );
-}
-
-class Comment extends ChangeNotifier{
-  final comment_id;
-  final String userName;
-  final String comment;
-  final bool like;
-  final int likes_count;
-  final int reply_count;
-  final List<Reply> reply_list;
-  final DateTime time;
-
-  Comment({
-    this.comment_id,
-    this.userName,
-    this.comment,
-    this.like,
-    this.likes_count,
-    this.reply_count,
-    this.reply_list,
-    this.time
-  }
-      );
-
-}
 
 class Post extends ChangeNotifier{
   final post_id;
@@ -62,7 +20,7 @@ class Post extends ChangeNotifier{
   final int likes_count;
   final int comments_count;
   final int shares_count;
-  final List<Reply> comment_list;
+  final List<Comment> comment_list;
   final DateTime time;
   Post({
 
@@ -78,6 +36,37 @@ class Post extends ChangeNotifier{
     this.comment_list = null,
     @required this.time,
   });
+
+  Future<void> addComment(String postId,String comment,) async{
+
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+
+
+    try{
+
+
+      final response = await http.post('https://socialnetwork-fa878.firebaseio.com/posts/$postId/comments.json?auth=$_tokenId',body: json.encode({
+        'comment': comment,
+        'userName': _userName,
+        'userId':_userId,
+        'time' : DateTime.now().toIso8601String()
+      }));
+      var _newComment = Comment(
+          userId: _userId,
+          userName: _userName,
+          time: DateTime.now(),
+          comment: comment,
+          comment_id: json.decode(response.body)['name'].toString()
+      );
+      comment_list.insert(0, _newComment);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
 
   Future<void> updatePost(String postId,String description,String imagePath,) async{
 
@@ -125,25 +114,11 @@ class Post extends ChangeNotifier{
 
 }
 
-class TimeLinePost{
-  final post_id;
-  final user_id;
-  final DateTime time;
-  final List<String> comment_likes_id;
-  final List<String> reply_likes_id;
-  TimeLinePost({
-    @required this.post_id,
-    @required this.user_id,
-    @required this.time,
-    @required this.comment_likes_id,
-    @required this.reply_likes_id,
-});
-}
-
 class PostProvider extends ChangeNotifier{
   List<Post> _myPosts = [];
   //final List<TimeLinePost> _timeleinePostsDetails = null;
-  final List<TimeLinePost> _myTimeLinePosts = null;
+
+
 
    List<Post> get getMyPost{
      _myPosts.sort((a,b) => b.time.compareTo(a.time));
@@ -205,27 +180,65 @@ class PostProvider extends ChangeNotifier{
     try{
       final response = await http.get('https://socialnetwork-fa878.firebaseio.com/posts.json?auth=$_tokenId&orderBy="userId"&equalTo="$_userId"');
       var extractedData = json.decode(response.body) as Map<String,dynamic>;
-      print("edata"+extractedData.toString());
       if(extractedData == null) {
-        print("edata"+extractedData.toString());
-        throw HttpException("Something went wrong , Please try again.1111");
+        throw HttpException("Something went wrong , Please try again.");
       }
       if(extractedData['error'] != null) {
-        print("xc1"+ extractedData['error']);
-        throw HttpException("Something went wrong , Please try again2222." +
+        throw HttpException("Something went wrong , Please try again." +
             extractedData['error'].toString());
       }
+      print("EXTDATA" + extractedData.toString());
       extractedData.forEach((key, value) {
+        print("EXTDATA2" + value.toString());
+
+
+        List<Reply> replies =[];
+
+        List<Comment> comments =[];
+        if(value['comments'] != null)
+        value['comments'].forEach((cKey, cValue) {
+          replies = [];
+          if(cValue['replies'] != null)
+          cValue['replies'].forEach((rKey, rValue) {
+            replies.insert(0, Reply(
+              reply_id: rKey,
+              userId: rValue['userId'],
+              userName: rValue['userName'],
+              reply: rValue['reply'],
+              time: DateTime.parse(rValue['time']),
+
+            ));
+          });
+
+
+          comments.insert(0, ( Comment(
+            comment_id: cKey,
+            userId: cValue['userId'],
+            userName: cValue['userName'],
+            comment: cValue['comment'],
+            time: DateTime.parse(cValue['time']),
+            reply_list:cValue['replies'] == null ? []:replies
+
+
+
+
+          )));
+
+
+        });
+
         var _newPost = Post(
             time:DateTime.parse(value['time']),
             userId: value['userId'],
             userName: value['userName'],
             description: value['description'],
+            comment_list:value['comments'] == null ? []: comments,
             image_url: value['imageUrl'],
             post_id: key
         );
         _myPosts.insert(0, _newPost);
       });
+
 
       notifyListeners();
 

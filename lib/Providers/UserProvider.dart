@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class User{
+  String currentPostId;
   final String userId;
   final String tokenId;
   final String userName;
@@ -12,6 +13,7 @@ class User{
   final List<String> followers;
 
   User({
+      this.currentPostId = null,
       @required this.userId,
       @required this.tokenId,
       @required this.userName,
