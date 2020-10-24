@@ -8,25 +8,61 @@ import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
 
-class Reply{
+class Reply extends ChangeNotifier{
   final reply_id;
   final String userId;
   final String userName;
   final String reply;
-  final bool like;
-  final int likes_count;
+   bool like;
+   int likes_count;
   final DateTime time;
 
   Reply({
-    this.reply_id,
-    this.userId,
-    this.userName,
-    this.reply,
-    this.like,
-    this.likes_count,
-    this.time
+    @required this.reply_id,
+    @required this.userId,
+    @required this.userName,
+    @required this.reply,
+    this.like = false,
+    this.likes_count = 0,
+    @required  this.time
   }
       );
+  Future<void> addTofav(String commentId,String replyId) async{
+
+    String _currentPostId = UserProvider.mainUser.currentPostId;
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+
+    try{
+
+      final response =
+      this.like == false ?
+      await http.patch('https://socialnetwork-fa878.firebaseio.com/posts/$_currentPostId/comments/$commentId/replies/$reply_id/likes/$_userId.json?auth=$_tokenId',body: json.encode({
+        'userName' : _userName
+      })):
+      await http.delete('https://socialnetwork-fa878.firebaseio.com/posts/$_currentPostId/comments/$commentId/replies/$reply_id/likes/$_userId.json?auth=$_tokenId');
+
+      if(response.statusCode > 400)
+      {
+        throw HttpException("Something went wrong. Error from server , Please try again.");
+      }else if(response  ==null){
+        throw HttpException("Something went wrong , Please try again.");
+      }
+      else {
+        this.like = !this.like;
+        this.like == true ?
+        this.likes_count += 1:this.likes_count -= 1;
+      }
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again." );
+    }
+  }
+
+
 }
 
 class Comment extends ChangeNotifier{
@@ -34,9 +70,9 @@ class Comment extends ChangeNotifier{
   final String userId;
   final String userName;
   final String comment;
-  final bool like;
-  final int likes_count;
-  final int reply_count;
+   bool like;
+   int likes_count;
+   int reply_count;
    List<Reply> reply_list;
   final DateTime time;
 
@@ -52,6 +88,41 @@ class Comment extends ChangeNotifier{
     @required this.time
   }
       );
+
+  Future<void> addTofav(String commentId) async{
+
+    String _currentPostId = UserProvider.mainUser.currentPostId;
+    String _userId = UserProvider.mainUser.userId;
+    String _tokenId = UserProvider.mainUser.tokenId;
+    String _userName = UserProvider.mainUser.userName;
+
+    try{
+
+      final response =
+      this.like == false ?
+      await http.patch('https://socialnetwork-fa878.firebaseio.com/posts/$_currentPostId/comments/$comment_id/likes/$_userId.json?auth=$_tokenId',body: json.encode({
+        'userName' : _userName
+      })):
+      await http.delete('https://socialnetwork-fa878.firebaseio.com/posts/$_currentPostId/comments/$comment_id/likes/$_userId.json?auth=$_tokenId');
+
+      if(response.statusCode > 400)
+      {
+        throw HttpException("Something went wrong. Error from server , Please try again.");
+      }else if(response  ==null){
+        throw HttpException("Something went wrong , Please try again.");
+      }
+      else {
+        this.like = !this.like;
+        this.like == true ?
+        this.likes_count += 1:this.likes_count -= 1;
+      }
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+
+    }catch(err){
+      throw HttpException("Something went wrong , Please try again." );
+    }
+  }
 
   Future<void> addReply(String commentId,String reply,) async{
 
@@ -75,82 +146,14 @@ class Comment extends ChangeNotifier{
           userName: _userName,
           time: DateTime.now(),
           reply: reply,
-          reply_id: json.decode(response.body)['name'].toString()
+          reply_id: json.decode(response.body)['name'].toString(),
       );
       reply_list.insert(0, _newReply);
+      this.reply_count += 1;
       notifyListeners();
 
     }catch(err){
       throw HttpException("Something went wrong , Please try again.");
     }
   }
-}
-
-class CommentProvider extends ChangeNotifier{
-  List<Comment> _myComments = [];
-  //final List<TimeLinePost> _timeleinePostsDetails = null;
-
-  List<Comment> get getMyPost{
-    _myComments.sort((a,b) => b.time.compareTo(a.time));
-    return _myComments;
-  }
-
-
-
-
-
-
-  Future<List<Comment>> getComment(String postId) async{
-
-    _myComments = [];
-    String _tokenId = UserProvider.mainUser.tokenId;
-    String _userName = UserProvider.mainUser.userName;
-    String _userId = UserProvider.mainUser.userId;
-    String imageUrl;
-
-    try{
-      final response = await http.get('https://socialnetwork-fa878.firebaseio.com/posts/$postId/comments.json?auth=$_tokenId');
-      var extractedData = json.decode(response.body) as Map<String,dynamic>;
-      if(extractedData == null) {
-        throw HttpException("Something went wrong , Please try again");
-      }
-      if(extractedData['error'] != null) {
-        throw HttpException("Something went wrong , Please try again" );
-      }
-      extractedData.forEach((key, value) {
-        var _newPost = Comment(
-            time:DateTime.parse(value['time']),
-            userId: value['userId'],
-            userName: value['userName'],
-            comment: value['comment'],
-            comment_id: key
-        );
-        _myComments.insert(0, _newPost);
-      });
-
-      notifyListeners();
-
-    }catch(err){
-      throw HttpException("Something went wrong , Please try again."+err.toString());
-    }
-  }
-
-//  Future<void> deletePost(String postId) async{
-//
-//    String _tokenId = UserProvider.mainUser.tokenId;
-//
-//    try{
-//      final response = await http.delete('https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId');
-//
-//      if(response.statusCode > 400){
-//        throw HttpException("Something went wrong , Please try again.");
-//      }else{
-//        _myPosts.removeWhere((element) => element.post_id == postId);}
-//      //_myTimeLinePosts.insert(0, _newPost);
-//      notifyListeners();
-//
-//    }catch(err){
-//      throw HttpException("Something went wrong , Please try again.");
-//    }
-//  }
 }

@@ -16,7 +16,6 @@ class CommentScreenContent extends StatelessWidget {
         .width;
 
     var _comment = Provider.of<Comment>(context);
-    print("Check1"+_comment.reply_list.length.toString());
     _comment.reply_list =  _comment.reply_list == null ?  []: _comment.reply_list;
     return  Center(
       child: Container(
@@ -47,7 +46,9 @@ class CommentScreenContent extends StatelessWidget {
                 return
                 _comment.reply_list.length== 0 ?
                 Center(child:Text('No Replies.',style: TextStyle(color: Colors.black),)):
-                ReplyFrame(_comment.reply_list[index]);
+                ChangeNotifierProvider.value(
+                    value:_comment.reply_list[index],
+                    child: ReplyFrame(_comment.comment_id));
               }
           ),
         ),

@@ -6,17 +6,38 @@ import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 import 'package:provider/provider.dart';
 
-class PostFrame extends StatelessWidget {
+class PostFrame extends StatefulWidget {
   bool commentWork;
   bool currentUser;
-  var mypost;
+
   PostFrame({this.commentWork = true, this.currentUser = false});
+  bool isLoading = false;
+
+  @override
+  _PostFrameState createState() => _PostFrameState();
+}
+
+class _PostFrameState extends State<PostFrame> {
+  Post mypost;
+
+
   @override
   Widget build(BuildContext context) {
     var _postProvider = Provider.of<PostProvider>(context,listen: false);
     mypost = Provider.of<Post>(context);
     void comment() {
       Navigator.of(context).pushNamed(PostScreen.route,arguments: mypost);
+    }
+
+    Future<void> like() async{
+      setState(() {
+        widget.isLoading = true;
+      });
+      try{await Provider.of<Post>(context,listen:false).addTofav(mypost.post_id);}
+      catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
+      setState(() {
+        widget.isLoading = false;
+      });
     }
 
 
@@ -40,7 +61,7 @@ class PostFrame extends StatelessWidget {
                   )),
                 ),
               ),
-              currentUser
+              widget.currentUser
                   ?
               DropdownButton(
 
@@ -123,10 +144,11 @@ class PostFrame extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              feedbackRow(const Icon(Icons.favorite_border, color: Colors.grey),
-                  null, 342),
+              widget.isLoading?Center(child: CircularProgressIndicator(),):
+              feedbackRow( Icon(mypost.like == true? Icons.favorite : Icons.favorite_border, color: Colors.grey),
+                  ()async{await like();}, mypost.likes_count),
               feedbackRow(const Icon(Icons.mode_comment, color: Colors.grey),
-                  commentWork ? comment : null, 5),
+                  widget.commentWork ? comment : null, mypost.comments_count),
               feedbackRow(const Icon(Icons.share, color: Colors.grey),null, 16)
             ],
           ),

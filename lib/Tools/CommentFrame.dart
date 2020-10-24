@@ -1,16 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 import 'package:provider/provider.dart';
 
-class CommentFrame extends StatelessWidget {
+class CommentFrame extends StatefulWidget {
 
   bool replyWork;
+  bool _isLoading = false;
   CommentFrame({this.replyWork = true});
 
+  @override
+  _CommentFrameState createState() => _CommentFrameState();
+}
+
+class _CommentFrameState extends State<CommentFrame> {
   @override
   Widget build(BuildContext context) {
     var _comment = Provider.of<Comment>(context);
@@ -18,7 +25,16 @@ class CommentFrame extends StatelessWidget {
       Navigator.of(context).pushNamed(CommentScreen.route ,arguments: _comment);
 
     }
-
+    Future<void> like() async{
+      setState(() {
+        widget._isLoading = true;
+      });
+      try{await Provider.of<Comment>(context,listen: false).addTofav(_comment.comment_id);}
+      catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
+      setState(() {
+        widget._isLoading = false;
+      });
+    }
 
     return
         Column(
@@ -53,12 +69,12 @@ class CommentFrame extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
-                                feedbackRow(context,
-                                    Icon(Icons.favorite_border,color: Colors.red),
-                                    null,
+                                widget._isLoading ? Center(child: CircularProgressIndicator(),): feedbackRow(context,
+                                    Icon(_comment.like?Icons.favorite: Icons.favorite_border,color: Colors.red),
+                                    ()async {await like();},
                                     Text(_comment.likes_count.toString() +"  " +'likes', style: TextStyle(color:Colors.grey))),
                                 feedbackRow(context, Icon(Icons.comment,color: Theme.of(context).accentColor),
-                                    replyWork ? reply :null,
+                                    widget.replyWork ? reply :null,
                                     Text(_comment.reply_count.toString() +"  " +'replies', style: TextStyle(color:Colors.grey))),
                               ],
                             )
@@ -85,7 +101,6 @@ class CommentFrame extends StatelessWidget {
       ],
     );
   }
-
 }
 
 

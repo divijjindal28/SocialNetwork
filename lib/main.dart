@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: PostProvider()),
-        ChangeNotifierProvider.value(value: CommentProvider()),
       ],
       child: MaterialApp(
           title: 'Social Network',

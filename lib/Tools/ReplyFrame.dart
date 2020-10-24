@@ -1,15 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
-import 'package:socialmediaapp/Tools/SendText.dart';
+import 'package:provider/provider.dart';
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 
-class ReplyFrame extends StatelessWidget {
-  Reply reply;
-  ReplyFrame(this.reply);
+class ReplyFrame extends StatefulWidget {
+  String commentId;
+  ReplyFrame(this.commentId);
+  bool _isLoading = false;
 
   @override
+  _ReplyFrameState createState() => _ReplyFrameState();
+}
+
+class _ReplyFrameState extends State<ReplyFrame> {
+  @override
   Widget build(BuildContext context) {
+    Reply _replyData=  Provider.of<Reply>(context);
+
+    Future<void> like() async{
+      setState(() {
+        widget._isLoading = true;
+      });
+      try{await Provider.of<Reply>(context,listen:false).addTofav(widget.commentId,_replyData.reply_id);}
+      catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
+      setState(() {
+        widget._isLoading = false;
+      });
+    }
     return
       Column(
         children: [
@@ -27,7 +46,7 @@ class ReplyFrame extends StatelessWidget {
 
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(reply.userName, style: TextStyle(
+                              child: Text(_replyData.userName, style: TextStyle(
                                   fontWeight: FontWeight.bold),),
                             ),
 
@@ -38,12 +57,18 @@ class ReplyFrame extends StatelessWidget {
                           padding:const EdgeInsets.all(2),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(reply.reply, style: TextStyle(
+                            child: Text(_replyData.reply, style: TextStyle(
                             ),),
                           ),
                         ),
 
-                      feedbackRow(const Icon(Icons.favorite_border,color: Colors.red,), null,'likes', 7),
+                      widget._isLoading?
+                      Center(child: CircularProgressIndicator(),):
+                      feedbackRow(
+                      Icon(_replyData.like?Icons.favorite: Icons.favorite_border,color: Colors.red,),
+                              ()async{await like();},
+                          'likes',
+                          _replyData.likes_count),
                     ],
                   ),
                 )
@@ -60,7 +85,7 @@ class ReplyFrame extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: icon,
-          onPressed: null,
+          onPressed: function,
 
         ),
         Text(count.toString() +"  " +label, style: TextStyle(color: Colors.grey)),
@@ -68,7 +93,6 @@ class ReplyFrame extends StatelessWidget {
       ],
     );
   }
-
 }
 
 
