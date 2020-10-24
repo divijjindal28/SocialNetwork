@@ -10,6 +10,7 @@ class PostScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     Post _postData=  Provider.of<Post>(context);
+    _postData.comment_list =  _postData.comment_list == null ?  []: _postData.comment_list;
 
     return  Center(
       child: Container(

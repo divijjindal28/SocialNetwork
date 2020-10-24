@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,8 +18,8 @@ class Post extends ChangeNotifier {
   bool like;
   int likes_count;
   int comments_count;
-  final int shares_count;
-  final List<Comment> comment_list;
+   int shares_count;
+   List<Comment> comment_list;
   final DateTime time;
   Post({
     @required this.post_id,
@@ -34,6 +34,29 @@ class Post extends ChangeNotifier {
     this.comment_list = null,
     @required this.time,
   });
+
+  Future<void> sharePost(BuildContext context,String postId,String description,String imagePath)async{
+    try{
+      String _tokenId = UserProvider.mainUser.tokenId;
+
+      await Provider.of<PostProvider>(context,listen: false).addPost(description, imagePath);
+      final response = await http.patch(
+          'https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId',
+          body: json.encode({
+            'shareCount': (this.shares_count+ 1).toString(),
+
+          }));
+      if (response.statusCode > 400) {
+        throw HttpException("Something went wrong , Please try again.");
+      } else {
+        this.shares_count += 1;
+
+      }
+      notifyListeners();
+
+    }
+    catch(err){ throw err;}
+  }
 
   Future<void> addComment(
     String postId,
@@ -158,17 +181,23 @@ class PostProvider extends ChangeNotifier {
     String _tokenId = UserProvider.mainUser.tokenId;
     String _userName = UserProvider.mainUser.userName;
     String imageUrl;
-    try {
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('post_image')
-          .child(_userId + '-' + DateTime.now().toIso8601String() + ".jpg");
-      await ref.putFile(File(imagePath)).onComplete;
-      imageUrl = await ref.getDownloadURL();
-    } on PlatformException catch (error) {
-      var messege = 'Something went wrong, try after sometime.';
-      if (error.message != null) messege = error.message;
-      throw HttpException(messege);
+    if(imagePath.contains('http'))
+      {imageUrl= imagePath;}
+    else {
+      try {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('post_image')
+            .child(_userId + '-' + DateTime.now().toIso8601String() + ".jpg");
+        await ref
+            .putFile(File(imagePath))
+            .onComplete;
+        imageUrl = await ref.getDownloadURL();
+      } on PlatformException catch (error) {
+        var messege = 'Something went wrong, try after sometime.';
+        if (error.message != null) messege = error.message;
+        throw HttpException(messege);
+      }
     }
 
     try {
@@ -179,6 +208,7 @@ class PostProvider extends ChangeNotifier {
             'userId': _userId,
             'description': description,
             'imageUrl': imageUrl,
+            'shareCount' : "0",
             'time': DateTime.now().toIso8601String()
           }));
       var _newPost = Post(
@@ -187,7 +217,9 @@ class PostProvider extends ChangeNotifier {
           userName: _userName,
           description: description,
           image_url: imageUrl,
+          shares_count: 0,
           post_id: json.decode(response.body)['name'].toString());
+
       _myPosts.insert(0, _newPost);
       //_myTimeLinePosts.insert(0, _newPost);
       notifyListeners();
@@ -293,6 +325,7 @@ class PostProvider extends ChangeNotifier {
             comment_list: value['comments'] == null ? [] : comments,
             image_url: value['imageUrl'],
             like: like,
+            shares_count:int.parse(value['shareCount']) ,
             likes_count: like_count,
             post_id: key,
             comments_count: commentCount);

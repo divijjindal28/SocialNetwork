@@ -12,6 +12,7 @@ class PostFrame extends StatefulWidget {
 
   PostFrame({this.commentWork = true, this.currentUser = false});
   bool isLoading = false;
+  bool isLoading2 = false;
 
   @override
   _PostFrameState createState() => _PostFrameState();
@@ -40,6 +41,43 @@ class _PostFrameState extends State<PostFrame> {
       });
     }
 
+    Future<void> share() async{
+      setState(() {
+        widget.isLoading2 = true;
+      });
+      await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Center(child: Text('Share Post?')),
+            content: Text("Do you want to share post?"),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed:()async{
+                      Navigator.of(ctx).pop();
+                      try{await Provider.of<Post>(context,listen:false).sharePost(context,mypost.post_id,mypost.description,mypost.image_url);}
+                    catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
+
+                      },
+                  ),
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed:() => Navigator.of(ctx).pop(),
+                  )
+                ],
+              )
+
+            ],
+          )
+      );
+
+      setState(() {
+        widget.isLoading2 = false;
+      });
+    }
 
     return Column(
       children: <Widget>[
@@ -135,7 +173,7 @@ class _PostFrameState extends State<PostFrame> {
         FadeInImage(
             placeholder:const AssetImage('assets/loading3.gif'),
             image: NetworkImage(mypost.image_url),
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             height: 300,
             width: double.infinity,
         ),
@@ -149,7 +187,8 @@ class _PostFrameState extends State<PostFrame> {
                   ()async{await like();}, mypost.likes_count),
               feedbackRow(const Icon(Icons.mode_comment, color: Colors.grey),
                   widget.commentWork ? comment : null, mypost.comments_count),
-              feedbackRow(const Icon(Icons.share, color: Colors.grey),null, 16)
+              widget.isLoading2?Center(child: CircularProgressIndicator(),):
+              feedbackRow(const Icon(Icons.share, color: Colors.grey),()async{await share();},  mypost.shares_count)
             ],
           ),
         )
