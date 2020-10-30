@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialmediaapp/HtttpException.dart';
 
 class User{
   String currentPostId;
@@ -37,25 +39,37 @@ class UserProvider  {
     });
 
     try{
-      var result = await http.get('https://socialnetwork-fa878.firebaseio.com/users/${_userId}.json?auth=$_token');
-      var Extractedmessege = json.decode(result.body);
-      print("bhai mere"+Extractedmessege.toString());
+
+      var userData = await Firestore.instance.collection('users').document(_userId).get();
+      print("bhai" + userData.data.toString());
+      if(userData == null)
+        {
+          throw HttpException('User Does not exist...please sign in again or check net connection');
+        }
       mainUser = User(
         userId: _userId,
         tokenId: _token,
-        userName: Extractedmessege['userName'],
-        userImageUrl: Extractedmessege['userImageUrl'],
-        followers: Extractedmessege['followers'],
+        userName: userData['userName'],
+        userImageUrl: userData['userImage'],
+        followers: userData['followers'],
       );
-      print('myresult' + json.decode(result.body)['userName'].toString());
-      print('myresult2' + _userId);
-      print('myresult3' + _token);
 
-      if(result.statusCode > 400){
 
-      }
+//      var result = await http.get('https://socialnetwork-fa878.firebaseio.com/users/${_userId}.json?auth=$_token');
+//      var Extractedmessege = json.decode(result.body);
+//      mainUser = User(
+//        userId: _userId,
+//        tokenId: _token,
+//        userName: Extractedmessege['userName'],
+//        userImageUrl: Extractedmessege['userImageUrl'],
+//        followers: Extractedmessege['followers'],
+//      );
+//
+//      if(result.statusCode > 400){
+//
+//      }
     }catch(error){
-      print('error1'+ error.toString());
+      throw HttpException('User Does not exist...please sign in again or check net connection');
     }
   }
 

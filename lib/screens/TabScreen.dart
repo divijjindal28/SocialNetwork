@@ -43,8 +43,7 @@ class _tabs_screenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('hello');
-    UserProvider.getUserInfo();
+
     // TODO: implement build
     return Scaffold(
 
@@ -56,7 +55,7 @@ class _tabs_screenState extends State<TabScreen> {
             return Center(child: CircularProgressIndicator(),);
           else if (resultSnap.hasError) {
             return Center(child: Text(
-                'Could not load. Please try again.' + resultSnap.toString()));
+                'Could not load. Please try again. Or check you internet connection'));
           }
           else
             return pages[selectedPageIndex]['page'];

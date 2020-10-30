@@ -49,10 +49,20 @@ class MyApp extends StatelessWidget {
           home: StreamBuilder(
             stream: FirebaseAuth.instance.onAuthStateChanged,
             builder: (ctx,userSnap){
-              if(userSnap.hasData){
-                return TabScreen();
+              if(userSnap.connectionState == ConnectionState.waiting){
+                return Center(child:CircularProgressIndicator());
               }
-              return AuthScreen();
+              else {
+                if (userSnap.hasError) {
+                  return Center(child: Text(
+                      "An Error has occured.Please check you internet connection and try again."));
+                }else {
+                  if (userSnap.hasData) {
+                    return TabScreen();
+                  }
+                  return AuthScreen();
+                }
+              }
             },
           ),
           routes: {

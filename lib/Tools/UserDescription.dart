@@ -1,13 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-
-class UserDescription extends StatelessWidget {
+class UserDescription extends StatefulWidget {
   final bool currentUser ;
+  String _imageUrl = UserProvider.mainUser.userImageUrl;
   UserDescription({this.currentUser = false});
+
+  @override
+  _UserDescriptionState createState() => _UserDescriptionState();
+}
+
+class _UserDescriptionState extends State<UserDescription> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +35,7 @@ class UserDescription extends StatelessWidget {
 
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                
+
                 Flexible(
                   fit: FlexFit.tight,
                   flex: 1,
@@ -33,12 +45,32 @@ class UserDescription extends StatelessWidget {
                         Hero(
                           tag: 1,
                           child: GestureDetector(
-                            onTap: (){
-                              currentUser? Navigator.of(context).pushNamed(ImageScreen.route) :null;
+                            onTap: ()async{
+                              if(widget.currentUser == true){
+                              final result = await Navigator.of(context)
+                                  .pushNamed(ImageScreen.route,arguments: true);
+                              setState(() {
+                                if(result!=null) {
+                                  widget._imageUrl = result;
+
+                                }
+                              });
+                              }else{null;}
                             },
                             child: CircleAvatar(
-                              child: Text(currentUser?'Add Image':'',style: TextStyle(color: Colors.white),),
                               backgroundColor: Colors.grey,
+                              backgroundImage:widget._imageUrl != null? NetworkImage(widget._imageUrl):null,
+                              child:
+                                  widget._imageUrl == null
+                                  ? Center(
+                                child: Text(
+                                  '+ Add Image',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20),
+                                ),
+                              )
+                                  :null,
                               maxRadius: 70,
 
                               //should be image
@@ -56,7 +88,7 @@ class UserDescription extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                           FittedBox(
-                              child:  Text("Divij Jindal",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
+                              child:  Text(UserProvider.mainUser.userName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
                       const SizedBox(height: 20,),
                       Column(
                         children: <Widget>[
@@ -83,9 +115,9 @@ class UserDescription extends StatelessWidget {
               Expanded(
 
                 child: RaisedButton(
-                  child: Text(currentUser?'LogOut': "Follow"),
+                  child: Text(widget.currentUser?'LogOut': "Follow"),
                   onPressed: (){
-                    currentUser ?
+                    widget.currentUser ?
                      logOut(context):
 
                         null;
@@ -94,7 +126,7 @@ class UserDescription extends StatelessWidget {
               ),
               SizedBox(width: 10,),
 
-              currentUser?Container(): Expanded(
+              widget.currentUser?Container(): Expanded(
                 child: RaisedButton(
                   child: Text("Messege"),
                   onPressed: (){

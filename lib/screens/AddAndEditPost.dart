@@ -74,9 +74,12 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                           child: GestureDetector(
                             onTap: () async {
                               final result = await Navigator.of(context)
-                                  .pushNamed(ImageScreen.route);
+                                  .pushNamed(ImageScreen.route , arguments: false);
                               setState(() {
-                                widget._imagePath = result;
+                                if(result!=null) {
+                                  widget._imageUrl = result;
+
+                                }
                               });
                             },
                             child: Container(
@@ -85,7 +88,7 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                                   color: Colors.grey,
                                 ),
                                 //child: Center(child:const Text('Add Image',style: TextStyle(color: Colors.white,fontSize: 18),)),
-                                child: widget._imagePath == null &&
+                                child:
                                         widget._imageUrl == null
                                     ? Center(
                                         child: Text(
@@ -95,12 +98,6 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                                               fontSize: 20),
                                         ),
                                       )
-                                    : widget._imagePath != null
-                                        ? Image(
-                                            image: FileImage(
-                                                File(widget._imagePath)),
-                                            fit: BoxFit.contain,
-                                          )
                                         : Image(
                                             image:
                                                 NetworkImage(widget._imageUrl),
@@ -146,11 +143,11 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                           widget._postId == null ?
                           await _postProvider.addPost(
                               widget.descriptionController.text,
-                              widget._imagePath):
+                              widget._imageUrl):
                           await widget._post.updatePost(
                               widget._postId,
                               widget.descriptionController.text,
-                              widget._imagePath==null?widget._imageUrl: widget._imagePath);
+                              widget._imageUrl);
                           Navigator.of(context).pop(true);
                         } catch (error) {
                           await MessegeBox.ShowError(

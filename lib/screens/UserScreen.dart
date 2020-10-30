@@ -35,9 +35,7 @@ class UserScreen extends StatelessWidget {
             return Consumer<PostProvider>(
               builder: (ctx,_posts,_) {
                 var _loadedPosts = _posts.getMyPost;
-              return _loadedPosts.length == 0
-                  ? Center(child: Text('You have no posts yet'))
-                  : Center(
+              return  Center(
                       child: Container(
                         width: width > 500 ? 500 : double.infinity,
                         margin: const EdgeInsets.symmetric(
@@ -51,7 +49,9 @@ class UserScreen extends StatelessWidget {
                                 );
                               }
                               index = index - 1;
-                              return ChangeNotifierProvider.value(
+                              return _loadedPosts.length == 0
+                                  ? Center(child: Text('You have no posts yet'))
+                                  : ChangeNotifierProvider.value(
                                 value: _loadedPosts[index],
                                 child: Card(
                                     elevation: 4,

@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:socialmediaapp/Providers/UserProvider.dart';
-import 'package:socialmediaapp/Providers/UserProvider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:provider/provider.dart';
 
@@ -110,18 +109,14 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
         }else{
           authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
           var user = await FirebaseAuth.instance.currentUser();
-          String _token;
-          await user.getIdToken().then((result){
-            _token =result.token;
-          });
+          String _userId = await user.uid;
           try{
-            var result = await http.patch('https://socialnetwork-fa878.firebaseio.com/users/${authResult.user.uid}.json?auth=$_token',body:json.encode(
-            {'userName' : userName}
-          ));
+            await Firestore.instance.collection('users').document(_userId).setData({'userName': userName});
 
-            if(result.statusCode > 400){
+//            var result = await http.patch('https://socialnetwork-fa878.firebaseio.com/users/${authResult.user.uid}.json?auth=$_token',body:json.encode(
+//            {'userName' : userName}
+//          ));
 
-            }
           }catch(error){
 
           }
