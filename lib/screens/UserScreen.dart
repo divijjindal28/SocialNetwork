@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/Tools/PostFrame.dart';
 import 'package:socialmediaapp/Tools/UserDescription.dart';
@@ -15,10 +16,12 @@ class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    Map<String,dynamic> data = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: homeScreen ? null : AppBar(title: const Text('Social Network')),
       body: FutureBuilder(
-        future: Provider.of<PostProvider>(context, listen: false).getPost(),
+        future:currentUser? Provider.of<PostProvider>(context, listen: false).getPost(UserProvider.mainUser.userId):
+        Provider.of<PostProvider>(context, listen: false).getPost(data["userId"].toString()),
         builder: ((ctx, resultSnap) {
           if (resultSnap.connectionState == ConnectionState.waiting)
             return Center(
@@ -46,6 +49,7 @@ class UserScreen extends StatelessWidget {
                               if (index == 0) {
                                 return UserDescription(
                                   currentUser: currentUser,
+                                  data:data
                                 );
                               }
                               index = index - 1;

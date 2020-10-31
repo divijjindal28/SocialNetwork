@@ -173,7 +173,7 @@ class _PostFrameState extends State<PostFrame> {
         FadeInImage(
             placeholder:const AssetImage('assets/loading3.gif'),
             image: NetworkImage(mypost.image_url),
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
             height: 300,
             width: double.infinity,
         ),

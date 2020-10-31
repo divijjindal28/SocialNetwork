@@ -10,15 +10,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class UserDescription extends StatefulWidget {
-  final bool currentUser ;
-  String _imageUrl = UserProvider.mainUser.userImageUrl;
-  UserDescription({this.currentUser = false});
-
+   bool currentUser =false;
+  Map<String,dynamic> data;
+  UserDescription({this.currentUser = false,this.data = null});
+  String _imageUrl ;
+  String userName;
+  String userId;
   @override
   _UserDescriptionState createState() => _UserDescriptionState();
 }
 
+
 class _UserDescriptionState extends State<UserDescription> {
+  @override
+  void initState() {
+    widget._imageUrl = widget.currentUser ? UserProvider.mainUser.userImageUrl:widget.data['userImage'] ;
+    widget.userName = widget.currentUser ? UserProvider.mainUser.userName:widget.data['userName'] ;
+    widget.userId = widget.currentUser ? UserProvider.mainUser.userId:widget.data['userId'] ;
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,7 @@ class _UserDescriptionState extends State<UserDescription> {
                     padding: const EdgeInsets.all(8.0),
                     child:
                         Hero(
-                          tag: 1,
+                          tag: widget.userId,
                           child: GestureDetector(
                             onTap: ()async{
                               if(widget.currentUser == true){
@@ -88,7 +100,7 @@ class _UserDescriptionState extends State<UserDescription> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                           FittedBox(
-                              child:  Text(UserProvider.mainUser.userName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
+                              child:  Text(widget.userName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),)),
                       const SizedBox(height: 20,),
                       Column(
                         children: <Widget>[
