@@ -40,6 +40,8 @@ class MessegeBox {
     );
   }
 
+
+
    static Future<String> takeImage(BuildContext context) async {
      bool camera = true;
      try{await showDialog(

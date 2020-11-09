@@ -39,7 +39,7 @@ class _ReplyFrameState extends State<ReplyFrame> {
                   child: Column(
                     children: <Widget>[
                       GestureDetector(
-                        onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route);}
+                        onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route,arguments: _replyData.userId);}
               ,
                         child: Padding(
                           padding:const EdgeInsets.all(2),

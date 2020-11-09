@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
@@ -45,7 +46,8 @@ class _CommentFrameState extends State<CommentFrame> {
                       children: <Widget>[
                         GestureDetector(
                           onTap: (){
-                            Navigator.of(context).pushNamed(UserScreen.route);
+
+                            Navigator.of(context).pushNamed(UserScreen.route,arguments: _comment.userId);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(2),

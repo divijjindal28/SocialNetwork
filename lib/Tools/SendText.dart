@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
+import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 
 
 class SendText extends StatefulWidget {
@@ -21,16 +22,27 @@ class _SendTextState extends State<SendText> {
   Widget build(BuildContext context) {
 
     void _onMessageSend()async{
-      if(widget.type==0){
-        var post = Provider.of<Post>(context,listen: false);
-        post.addComment(widget.id, _controller.text);
-
-      }else if(widget.type==1){
-        var comment = Provider.of<Comment>(context,listen: false);
-        comment.addReply(widget.id, _controller.text);
-
+      try {
+        if (widget.type == 0) {
+          var post = Provider.of<Post>(context, listen: false);
+          await post.addComment(widget.id, _controller.text);
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(
+            'Comment added', style: TextStyle(color: Colors.white),),
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor,));
+        } else if (widget.type == 1) {
+          var comment = Provider.of<Comment>(context, listen: false);
+          await comment.addReply(widget.id, _controller.text);
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(
+            'Reply added', style: TextStyle(color: Colors.white),),
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor,));
+        }
+      }catch(error){
+        MessegeBox.ShowError(context: context,intent: "ERROR");
       }
-
 
       _controller.clear();
     }

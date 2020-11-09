@@ -19,35 +19,21 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
 
     Post post=  ModalRoute.of(context).settings.arguments;
+
     UserProvider.mainUser.currentPostId = post.post_id;
 
-    Future<void> refresh()async{
-      setState(() {
-        widget._isLoading = true;
-      });
-      try{
-        //await Provider.of<PostProvider>(context, listen: false).getPost();
-      }catch(error){
-        await MessegeBox.ShowError(context:context, intent:"ERROR");
-      }
-      setState(() {
-        widget._isLoading = false;
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(post.userName),
 
       ),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: ChangeNotifierProvider.value(
+      body: ChangeNotifierProvider.value(
           value: post,
 
           child:widget._isLoading? Center(child: CircularProgressIndicator(),): PostScreenContent()
         ),
-      ),
+
     );
   }
 }

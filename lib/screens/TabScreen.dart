@@ -55,7 +55,7 @@ class _tabs_screenState extends State<TabScreen> {
             return Center(child: CircularProgressIndicator(),);
           else if (resultSnap.hasError) {
             return Center(child: Text(
-                'Could not load. Please try again. Or check you internet connection'));
+                resultSnap.error.toString()));
           }
           else
             return pages[selectedPageIndex]['page'];

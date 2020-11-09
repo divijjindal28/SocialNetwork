@@ -34,7 +34,8 @@ class _PostFrameState extends State<PostFrame> {
       setState(() {
         widget.isLoading = true;
       });
-      try{await Provider.of<Post>(context,listen:false).addTofav(mypost.post_id);}
+      try{await Provider.of<Post>(context,listen:false).addTofav(mypost.post_id);
+      }
       catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
       setState(() {
         widget.isLoading = false;
@@ -58,7 +59,9 @@ class _PostFrameState extends State<PostFrame> {
                     child: Text('Yes'),
                     onPressed:()async{
                       Navigator.of(ctx).pop();
-                      try{await Provider.of<Post>(context,listen:false).sharePost(context,mypost.post_id,mypost.description,mypost.image_url);}
+                      try{await Provider.of<Post>(context,listen:false).sharePost(context,widget.currentUser,mypost.post_id,mypost.description,mypost.image_url);
+                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post shared on your timeline',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,));
+                      }
                     catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
 
                       },
@@ -90,7 +93,7 @@ class _PostFrameState extends State<PostFrame> {
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed(UserScreen.route);
+                    Navigator.of(context).pushNamed(UserScreen.route,arguments: mypost.userId);
                   },
                   child: FittedBox(
                       child: Text(
@@ -115,10 +118,15 @@ class _PostFrameState extends State<PostFrame> {
                   ],
                   onChanged: (value) async{
                     if (value == 'edit') {
-                      Navigator.of(context).pushNamed(AddAndEditPost.route,arguments: {
+                      await Navigator.of(context).pushNamed(AddAndEditPost.route,arguments: {
 
                         'provider':mypost
-                      });
+                      }).then((value) => value?
+                          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post added/edited',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,))
+                          :
+                          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post could not be added/edited',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,))
+
+                    );
 
                     }else
                     {
@@ -134,7 +142,17 @@ class _PostFrameState extends State<PostFrame> {
                                   children: [
                                     FlatButton(
                                       child: Text('Yes'),
-                                      onPressed:()async{await _postProvider.deletePost(mypost.post_id);Navigator.of(ctx).pop();},
+                                      onPressed:()async{
+                                        try {
+                                          await _postProvider.deletePost(
+                                              mypost.post_id);
+                                          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post deleted from your timeline',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,));
+
+                                          Navigator.of(ctx).pop();
+                                        }catch(error){
+                                          MessegeBox.ShowError(context: context,intent: 'ERROR');
+                                        }
+                                        },
                                     ),
                                     FlatButton(
                                       child: Text('No'),

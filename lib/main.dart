@@ -8,6 +8,7 @@ import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/AuthScreen.dart';
 import 'package:socialmediaapp/screens/ChatUserScreen.dart';
 import 'package:socialmediaapp/screens/CommentScreen.dart';
+import 'package:socialmediaapp/screens/FollowScreen.dart';
 import 'package:socialmediaapp/screens/ImageScreen.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
 import 'package:socialmediaapp/screens/TabScreen.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
             PostScreen.route :(_) =>  PostScreen(),
             CommentScreen.route :(_) => CommentScreen(),
             UserScreen.route :(_) => UserScreen(),
+            FollowScreen.route:(_)=>FollowScreen()
 
           },
 

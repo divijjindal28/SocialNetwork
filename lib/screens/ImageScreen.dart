@@ -14,7 +14,6 @@ class ImageScreen extends StatefulWidget {
 
   static const route  = './imageScreen';
   bool _loading = false;
-  File _image;
   String _imagePath = null;
   String networkImageUrl = '';
   String assetImageUrl = 'assets/add.png';
@@ -105,6 +104,7 @@ class _ImageScreenState extends State<ImageScreen> {
                       .onComplete;
 
                    url = await ref.getDownloadURL();
+                  
                   widget.userImage ?
                   await Firestore.instance.document(
                       'users/${UserProvider.mainUser.userId}')

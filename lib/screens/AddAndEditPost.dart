@@ -142,12 +142,14 @@ class _AddAndEditPostState extends State<AddAndEditPost> {
                         try {
                           widget._postId == null ?
                           await _postProvider.addPost(
+                              true,
                               widget.descriptionController.text,
                               widget._imageUrl):
                           await widget._post.updatePost(
                               widget._postId,
                               widget.descriptionController.text,
                               widget._imageUrl);
+
                           Navigator.of(context).pop(true);
                         } catch (error) {
                           await MessegeBox.ShowError(

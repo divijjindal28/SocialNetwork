@@ -35,11 +35,11 @@ class Post extends ChangeNotifier {
     @required this.time,
   });
 
-  Future<void> sharePost(BuildContext context,String postId,String description,String imagePath)async{
+  Future<void> sharePost(BuildContext context,bool currentUser,String postId,String description,String imagePath)async{
     try{
       String _tokenId = UserProvider.mainUser.tokenId;
 
-      await Provider.of<PostProvider>(context,listen: false).addPost(description, imagePath);
+      await Provider.of<PostProvider>(context,listen: false).addPost(currentUser,description, imagePath);
       final response = await http.patch(
           'https://socialnetwork-fa878.firebaseio.com/posts/$postId.json?auth=$_tokenId',
           body: json.encode({
@@ -158,6 +158,7 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> addPost(
+    bool currentUser ,
     String description,
     String imageUrl,
   ) async {
@@ -185,7 +186,9 @@ class PostProvider extends ChangeNotifier {
           shares_count: 0,
           post_id: json.decode(response.body)['name'].toString());
 
-      _myPosts.insert(0, _newPost);
+      if(currentUser == true) {
+        _myPosts.insert(0, _newPost);
+      }
       //_myTimeLinePosts.insert(0, _newPost);
       notifyListeners();
     } catch (err) {

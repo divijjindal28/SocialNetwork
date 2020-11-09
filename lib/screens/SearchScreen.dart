@@ -112,14 +112,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                                     title: Text(document[index]["userName"]),
                                     onTap: () {
-                                      Navigator.of(context)
-                                          .pushNamed(UserScreen.route,arguments:
-                                      {
-                                        'userImage':document[index]["userImage"],
-                                        'userName':document[index]["userName"],
-                                        'userId':document[index].documentID
+                                      if(document[index].documentID == UserProvider.mainUser.userId)
+                                        {
+                                          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Please go to account screen.',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,));
+                                        }else {
+                                        Navigator.of(context)
+                                            .pushNamed(
+                                            UserScreen.route, arguments: document[index].documentID
+                                        );
                                       }
-                                      );
                                     },
                                   ),
                                   Divider()
