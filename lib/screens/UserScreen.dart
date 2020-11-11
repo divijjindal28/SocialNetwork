@@ -93,7 +93,6 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     String userId = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: widget.homeScreen
           ? null
@@ -130,10 +129,8 @@ class _UserScreenState extends State<UserScreen> {
                                   resultSnap.toString()));
                         } else {
                           //List<Post> _loadedPosts =Provider.of<PostProvider>(context,).getMyPost;
+                          var _loadedPosts = Provider.of<PostProvider>(context, listen: false).getMyPost;
 
-                          return Consumer<PostProvider>(
-                              builder: (ctx, _posts, _) {
-                            var _loadedPosts = _posts.getMyPost;
                             return Center(
                               child: Container(
                                 width: width > 500 ? 500 : double.infinity,
@@ -157,6 +154,7 @@ class _UserScreenState extends State<UserScreen> {
                                               child: Card(
                                                   elevation: 4,
                                                   child: PostFrame(
+
                                                     currentUser:
                                                         widget.currentUser,
                                                   )),
@@ -164,7 +162,7 @@ class _UserScreenState extends State<UserScreen> {
                                     }),
                               ),
                             );
-                          });
+
                         }
                       }),
                     ),

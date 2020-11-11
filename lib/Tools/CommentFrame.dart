@@ -46,7 +46,9 @@ class _CommentFrameState extends State<CommentFrame> {
                       children: <Widget>[
                         GestureDetector(
                           onTap: (){
+                            if(UserProvider.mainUser.userId == _comment.userId){}
 
+                            else
                             Navigator.of(context).pushNamed(UserScreen.route,arguments: _comment.userId);
                           },
                           child: Padding(

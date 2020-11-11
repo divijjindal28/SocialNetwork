@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
 
@@ -39,7 +40,11 @@ class _ReplyFrameState extends State<ReplyFrame> {
                   child: Column(
                     children: <Widget>[
                       GestureDetector(
-                        onTap: ()      {Navigator.of(context).pushNamed(UserScreen.route,arguments: _replyData.userId);}
+                        onTap: ()      {
+                          if(UserProvider.mainUser.userId == _replyData.userId){}
+
+                          else
+                          Navigator.of(context).pushNamed(UserScreen.route,arguments: _replyData.userId);}
               ,
                         child: Padding(
                           padding:const EdgeInsets.all(2),

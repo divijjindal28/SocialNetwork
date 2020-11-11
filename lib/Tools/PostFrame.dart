@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/PostScreen.dart';
@@ -9,8 +10,9 @@ import 'package:provider/provider.dart';
 class PostFrame extends StatefulWidget {
   bool commentWork;
   bool currentUser;
+  bool timeLine;
 
-  PostFrame({this.commentWork = true, this.currentUser = false});
+  PostFrame({this.timeLine = false,this.commentWork = true, this.currentUser = false});
   bool isLoading = false;
   bool isLoading2 = false;
 
@@ -27,7 +29,7 @@ class _PostFrameState extends State<PostFrame> {
     var _postProvider = Provider.of<PostProvider>(context,listen: false);
     mypost = Provider.of<Post>(context);
     void comment() {
-      Navigator.of(context).pushNamed(PostScreen.route,arguments: mypost);
+      Navigator.of(context).pushNamed(PostScreen.route,arguments: {'post':mypost,'timeline':widget.timeLine});
     }
 
     Future<void> like() async{
@@ -92,8 +94,14 @@ class _PostFrameState extends State<PostFrame> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(UserScreen.route,arguments: mypost.userId);
+                  onTap: () async{
+                    if(UserProvider.mainUser.userId == mypost.userId){}
+
+                    else {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(
+                          UserScreen.route, arguments: mypost.userId);
+                    }
                   },
                   child: FittedBox(
                       child: Text(

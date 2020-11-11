@@ -3,7 +3,6 @@ import 'package:socialmediaapp/CustomPageTransitionBuilder.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
-import 'package:socialmediaapp/screens/AccountScreen.dart';
 import 'package:socialmediaapp/screens/AddAndEditPost.dart';
 import 'package:socialmediaapp/screens/AuthScreen.dart';
 import 'package:socialmediaapp/screens/ChatUserScreen.dart';
@@ -67,7 +66,6 @@ class MyApp extends StatelessWidget {
             },
           ),
           routes: {
-            AccountScreen.route :(_) => AccountScreen(homeScreen: false,),
             ChatUserScreen.route :(_) => ChatUserScreen(),
             AddAndEditPost.route :(_) => AddAndEditPost(),
             ImageScreen.route :(_) => ImageScreen(),
