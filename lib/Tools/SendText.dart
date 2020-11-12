@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/PostProvider.dart';
+import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:socialmediaapp/Tools/MesseegeBox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class SendText extends StatefulWidget {
   int type;
   String text;
   String id ;
+
   SendText(this.id,this.text,this.type);
   @override
   _SendTextState createState() => _SendTextState();
@@ -40,8 +43,9 @@ class _SendTextState extends State<SendText> {
                 .of(context)
                 .primaryColor,));
         }
+
       }catch(error){
-        MessegeBox.ShowError(context: context,intent: "ERROR");
+        MessegeBox.ShowError(context: context,msg: error.toString(),intent: "ERROR");
       }
 
       _controller.clear();

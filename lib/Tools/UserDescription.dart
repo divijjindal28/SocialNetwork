@@ -254,7 +254,7 @@ class _UserDescriptionState extends State<UserDescription> {
                 child: RaisedButton(
                   child: Text("Messege"),
                   onPressed: (){
-                    Navigator.of(context).pushNamed(ChatUserScreen.route);
+                    Navigator.of(context).pushNamed(ChatUserScreen.route,arguments: widget.data);
                   },
                 ),
               ),
