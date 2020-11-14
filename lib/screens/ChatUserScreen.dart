@@ -14,10 +14,15 @@ class ChatUserScreen extends StatefulWidget {
 }
 
 class ChatUserScreenState extends State<ChatUserScreen> {
+  ScrollController _scrollController = ScrollController();
+
+  _scrollToBottom() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> data = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(data['userName']),
@@ -54,10 +59,13 @@ class ChatUserScreenState extends State<ChatUserScreen> {
                                 builder: (_, streamSnapshot) {
                                   final document =
                                       streamSnapshot.data.documents;
+                                  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+
 //                          document.length > 0
 //                              ? beforeChat = true
 //                              : beforeChat = false;
                                   return ListView.builder(
+                                    controller: _scrollController,
                                       itemCount: document.length > 0
                                           ? document.length
                                           : 0,

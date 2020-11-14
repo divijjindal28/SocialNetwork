@@ -11,8 +11,9 @@ class PostFrame extends StatefulWidget {
   bool commentWork;
   bool currentUser;
   bool timeLine;
+  UserScreenState parent;
 
-  PostFrame({this.timeLine = false,this.commentWork = true, this.currentUser = false});
+  PostFrame({this.parent,this.timeLine = false,this.commentWork = true, this.currentUser = false});
   bool isLoading = false;
   bool isLoading2 = false;
 
@@ -63,6 +64,9 @@ class _PostFrameState extends State<PostFrame> {
                       Navigator.of(ctx).pop();
                       try{await Provider.of<Post>(context,listen:false).sharePost(context,widget.currentUser,mypost.post_id,mypost.description,mypost.image_url);
                       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post shared on your timeline',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,));
+                      widget.parent.setState(() {
+
+                      });
                       }
                     catch(error){MessegeBox.ShowError(context: context,msg: error.toString(),intent: 'ERROR');}
 
@@ -156,7 +160,11 @@ class _PostFrameState extends State<PostFrame> {
                                               mypost.post_id);
                                           Scaffold.of(context).showSnackBar(SnackBar(content: Text('Post deleted from your timeline',style: TextStyle(color:Colors.white),),backgroundColor: Theme.of(context).primaryColor,));
 
+                                          widget.parent.setState(() {
+
+                                          });
                                           Navigator.of(ctx).pop();
+
                                         }catch(error){
                                           MessegeBox.ShowError(context: context,intent: 'ERROR');
                                         }

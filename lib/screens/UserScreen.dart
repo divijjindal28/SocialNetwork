@@ -19,10 +19,10 @@ class UserScreen extends StatefulWidget {
   UserScreen({this.currentUser = false, this.homeScreen = false});
 
   @override
-  _UserScreenState createState() => _UserScreenState();
+  UserScreenState createState() => UserScreenState();
 }
 
-class _UserScreenState extends State<UserScreen> {
+class UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -145,16 +145,18 @@ class _UserScreenState extends State<UserScreen> {
                                             data: widget.data);
                                       }
                                       index = index - 1;
+
                                       return _loadedPosts.length == 0
                                           ? Center(
-                                              child:
-                                                  Text('You have no posts yet'))
-                                          : ChangeNotifierProvider.value(
+                                          child:
+                                          Text('You have no posts yet'))
+                                          :  ChangeNotifierProvider.value(
                                               value: _loadedPosts[index],
                                               child: Card(
                                                   elevation: 4,
                                                   child: PostFrame(
 
+                                                    parent: this,
                                                     currentUser:
                                                         widget.currentUser,
                                                   )),

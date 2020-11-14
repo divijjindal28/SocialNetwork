@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Post extends ChangeNotifier {
   final post_id;
@@ -226,15 +227,15 @@ class PostProvider extends ChangeNotifier {
 
             if (cValue['replies'] != null) {
               cValue['replies'].forEach((rKey, rValue) {
-                bool like = false;
-                int like_count = 0;
+                bool replyLike = false;
+                int reply_like_count = 0;
                 replyCount += 1;
 
                 if (rValue['likes'] != null)
-                  rValue['likes'].forEach((rKey, rValue) {
-                    like_count += 1;
+                  rValue['likes'].forEach((r2Key, r2Value) {
+                    reply_like_count += 1;
 
-                    if (rKey == _userId) like = true;
+                    if (r2Key == UserProvider.mainUser.userId) replyLike = true;
                   });
 
                 replies.insert(
@@ -245,18 +246,18 @@ class PostProvider extends ChangeNotifier {
                         userName: rValue['userName'],
                         reply: rValue['reply'],
                         time: DateTime.parse(rValue['time']),
-                        likes_count: like_count,
-                        like: like));
+                        likes_count: reply_like_count,
+                        like: replyLike));
               });
             }
-            bool like = false;
-            int like_count = 0;
+            bool commentLike = false;
+            int comment_like_count = 0;
 
             if (cValue['likes'] != null)
               cValue['likes'].forEach((cKey, cValue) {
-                like_count += 1;
+                comment_like_count += 1;
 
-                if (cKey == _userId) like = true;
+                if (cKey == UserProvider.mainUser.userId) commentLike = true;
               });
 
             comments.insert(
@@ -268,8 +269,8 @@ class PostProvider extends ChangeNotifier {
                     comment: cValue['comment'],
                     time: DateTime.parse(cValue['time']),
                     reply_list: cValue['replies'] == null ? [] : replies,
-                    like: like,
-                    likes_count: like_count,
+                    like: commentLike,
+                    likes_count: comment_like_count,
                     reply_count: replyCount)));
           });
         }
@@ -280,7 +281,7 @@ class PostProvider extends ChangeNotifier {
         if (value['likes'] != null)
           value['likes'].forEach((lKey, lValue) {
             like_count += 1;
-            if (lKey == _userId) like = true;
+            if (lKey == UserProvider.mainUser.userId) like = true;
           });
 
         var _newPost = Post(
@@ -328,8 +329,7 @@ class PostProvider extends ChangeNotifier {
         throw HttpException("Something went wrong , Please try again.");
       }
       if (extractedData['error'] != null) {
-        throw HttpException("Something went wrong , Please try again." +
-            extractedData['error'].toString());
+        throw HttpException("Something went wrong , Please try again.");
       }
 
       extractedData.forEach((key, value) {
@@ -344,15 +344,15 @@ class PostProvider extends ChangeNotifier {
 
             if (cValue['replies'] != null) {
               cValue['replies'].forEach((rKey, rValue) {
-                bool like = false;
-                int like_count = 0;
+                bool replyLike = false;
+                int reply_like_count = 0;
                 replyCount += 1;
 
                 if (rValue['likes'] != null)
-                  rValue['likes'].forEach((rKey, rValue) {
-                    like_count += 1;
+                  rValue['likes'].forEach((r2Key, r2Value) {
+                    reply_like_count += 1;
 
-                    if (rKey == _userId) like = true;
+                    if (r2Key == UserProvider.mainUser.userId) replyLike = true;
                   });
 
                 replies.insert(
@@ -363,18 +363,18 @@ class PostProvider extends ChangeNotifier {
                         userName: rValue['userName'],
                         reply: rValue['reply'],
                         time: DateTime.parse(rValue['time']),
-                        likes_count: like_count,
-                        like: like));
+                        likes_count: reply_like_count,
+                        like: replyLike));
               });
             }
-            bool like = false;
-            int like_count = 0;
+            bool commentLike = false;
+            int comment_like_count = 0;
 
             if (cValue['likes'] != null)
               cValue['likes'].forEach((cKey, cValue) {
-                like_count += 1;
+                comment_like_count += 1;
 
-                if (cKey == _userId) like = true;
+                if (cKey == UserProvider.mainUser.userId) commentLike = true;
               });
 
             comments.insert(
@@ -386,8 +386,8 @@ class PostProvider extends ChangeNotifier {
                     comment: cValue['comment'],
                     time: DateTime.parse(cValue['time']),
                     reply_list: cValue['replies'] == null ? [] : replies,
-                    like: like,
-                    likes_count: like_count,
+                    like: commentLike,
+                    likes_count: comment_like_count,
                     reply_count: replyCount)));
           });
         }
@@ -398,7 +398,7 @@ class PostProvider extends ChangeNotifier {
         if (value['likes'] != null)
           value['likes'].forEach((lKey, lValue) {
             like_count += 1;
-            if (lKey == _userId) like = true;
+            if (lKey == UserProvider.mainUser.userId) like = true;
           });
 
         var _newPost = Post(

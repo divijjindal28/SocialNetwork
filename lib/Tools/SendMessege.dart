@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Providers/CommentProvider.dart';
@@ -15,6 +17,9 @@ class SendMessege extends StatefulWidget {
   Map<String,dynamic> data;
   bool beforeChat;
   ChatUserScreenState parent;
+  bool _isLoading = false;
+  final _form = GlobalKey<FormState>();
+
   SendMessege(this.beforeChat,this.data,this.id,this.text,this.parent);
   @override
   _SendMessegeState createState() => _SendMessegeState();
@@ -28,6 +33,10 @@ class _SendMessegeState extends State<SendMessege> {
   Widget build(BuildContext context) {
 
     void _onMessageSend()async{
+      if(!widget._form.currentState.validate()){return;}
+      setState(() {
+        widget._isLoading = true;
+      });
       try {
 
 
@@ -69,11 +78,16 @@ class _SendMessegeState extends State<SendMessege> {
             'time':DateTime.now().toIso8601String()
           });}
 
+
+
       }catch(error){
         MessegeBox.ShowError(context: context,msg: error.toString(),intent: "ERROR");
       }
 
       _controller.clear();
+      setState(() {
+        widget._isLoading = false;
+      });
     }
 
 
@@ -96,35 +110,38 @@ class _SendMessegeState extends State<SendMessege> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: TextFormField(
+                child: Form(
+                  key: widget._form,
+                  child: TextFormField(
 
-                  controller: _controller,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                      hintText: widget.text),
+                    controller: _controller,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding:
+                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                        hintText: widget.text),
 
-                  validator:(val){
-                    if(val.isEmpty){
-                      return 'Plaese enter text';
-                    }
-                    else return null;
-                  } ,
-                  onSaved: (value){
-                    setState(() {
-                      _controller.text = value;
-                    });
-                  },
+                    validator:(val){
+                      if(val.isEmpty){
+                        return 'Plaese enter text';
+                      }
+                      else return null;
+                    } ,
+                    onSaved: (value){
+                      setState(() {
+                        _controller.text = value;
+                      });
+                    },
+                  ),
                 ),
               ),
 
             ),
-            IconButton(icon:const Icon(Icons.send,size: 25,), onPressed: _onMessageSend)
+            IconButton(icon: Icon(Icons.send,size: 25,color: widget._isLoading?Colors.black12:Colors.black,), onPressed:widget._isLoading?null: _onMessageSend)
           ],
         ),
 

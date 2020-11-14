@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialmediaapp/Providers/UserProvider.dart';
+import 'package:socialmediaapp/screens/UserScreen.dart';
 
 class FollowScreen extends StatelessWidget {
   static const route = './followScreen';
@@ -18,6 +19,15 @@ class FollowScreen extends StatelessWidget {
         children: [
           ...followList.map((e) =>
            ListTile(
+             onTap: (){
+               if(e.userId == UserProvider.mainUser.userId)
+                 {
+                   Scaffold.of(context).showSnackBar(SnackBar(content: Text('Please go to your account screen')));
+                 }
+               else{
+                 Navigator.of(context).pushNamed(UserScreen.route,arguments: e.userId);
+               }
+             },
              leading: CircleAvatar(
                backgroundImage: NetworkImage(e.userImageUrl),
              ),

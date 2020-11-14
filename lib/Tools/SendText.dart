@@ -11,6 +11,7 @@ class SendText extends StatefulWidget {
   int type;
   String text;
   String id ;
+  final _form = GlobalKey<FormState>();
 
   SendText(this.id,this.text,this.type);
   @override
@@ -25,6 +26,8 @@ class _SendTextState extends State<SendText> {
   Widget build(BuildContext context) {
 
     void _onMessageSend()async{
+      if(!widget._form.currentState.validate()){return;}
+
       try {
         if (widget.type == 0) {
           var post = Provider.of<Post>(context, listen: false);
@@ -71,30 +74,33 @@ class _SendTextState extends State<SendText> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: TextFormField(
+                  child: Form(
+                    key: widget._form,
+                    child: TextFormField(
 
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding:
-                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                        hintText: widget.text),
+                      controller: _controller,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding:
+                          EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                          hintText: widget.text),
 
-                    validator:(val){
-                      if(val.isEmpty){
-                        return 'Plaese enter text';
-                      }
-                      else return null;
-                    } ,
-                    onSaved: (value){
-                      setState(() {
-                        _controller.text = value;
-                      });
-                    },
+                      validator:(val){
+                        if(val.isEmpty){
+                          return 'Plaese enter text';
+                        }
+                        else return null;
+                      } ,
+                      onSaved: (value){
+                        setState(() {
+                          _controller.text = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
 

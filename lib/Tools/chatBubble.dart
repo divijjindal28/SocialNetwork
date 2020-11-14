@@ -11,7 +11,7 @@ class chatBubble extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Padding(
-        padding: EdgeInsets.all(5),
+        padding:userId == UserProvider.mainUser.userId ? EdgeInsets.only(top:5,bottom: 5,left:15,right: 5) : EdgeInsets.only(top:5,bottom: 5,left:5,right: 15),
         child: Align(
           alignment: userId == UserProvider.mainUser.userId
               ? Alignment.centerRight

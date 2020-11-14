@@ -42,7 +42,7 @@ class _UserDescriptionState extends State<UserDescription> {
   bool get isFriendCheck{
     if(UserProvider.mainUser.following != null ){
       if(!UserProvider.mainUser.following.isEmpty){
-        if(UserProvider.mainUser.following.firstWhere((FollowMap element) => element.userId == widget.userId) != null){return true;}
+        if(UserProvider.mainUser.following.firstWhere((FollowMap element) => element.userId == widget.userId,orElse:(){ return null;}) != null){return true;}
         else{return false;}
       }else{return false;}
     }

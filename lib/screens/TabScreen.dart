@@ -20,6 +20,8 @@ class _tabs_screenState extends State<TabScreen> {
 
   @override
   void initState() {
+    //final fbm = FirebaseMesseging();
+
     pages =  [
 
       {'page':HomeScreen(),'title':'Home'},
@@ -40,6 +42,9 @@ class _tabs_screenState extends State<TabScreen> {
     });
 
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

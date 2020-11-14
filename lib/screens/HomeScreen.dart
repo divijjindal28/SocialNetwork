@@ -64,8 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             else if (resultSnap.hasError) {
               return Center(
-                  child: Text('Could not load. Please try again.' +
-                      resultSnap.toString()));
+                  child: Text('Could not load. Please try again.' ));
             } else {
               //List<Post> _loadedPosts =Provider.of<PostProvider>(context,).getMyPost;
 
