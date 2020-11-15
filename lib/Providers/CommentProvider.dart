@@ -27,6 +27,9 @@ class Reply extends ChangeNotifier{
     @required  this.time
   }
       );
+
+
+
   Future<void> addTofav(String commentId,String replyId) async{
 
     String _currentPostId = UserProvider.mainUser.currentPostId;
@@ -69,7 +72,7 @@ class Comment extends ChangeNotifier{
   final comment_id;
   final String userId;
   final String userName;
-  final String comment;
+   String comment;
    bool like;
    int likes_count;
    int reply_count;
@@ -89,6 +92,26 @@ class Comment extends ChangeNotifier{
   }
       );
 
+
+  Future<void> deletePostReply(String replyId) async {
+    String _tokenId = UserProvider.mainUser.tokenId;
+
+    try {
+      final response = await http.delete(
+          'https://socialnetwork-fa878.firebaseio.com/posts/${UserProvider.mainUser.currentPostId}/comments/${comment_id}/replies/${replyId}.json?auth=$_tokenId');
+
+      if (response.statusCode > 400) {
+        throw HttpException("Something went wrong , Please try again.");
+      } else {
+        reply_list.removeWhere((element) => element.reply_id ==replyId);
+        reply_count = reply_count - 1;
+      }
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+    } catch (err) {
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
   Future<void> addTofav(String commentId) async{
 
     String _currentPostId = UserProvider.mainUser.currentPostId;

@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:socialmediaapp/Tools/CommentFrame.dart';
 import 'package:socialmediaapp/Tools/PostFrame.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
+import 'package:socialmediaapp/screens/PostScreen.dart';
 
 class PostScreenContent extends StatelessWidget {
+  PostScreenState parent;
+  PostScreenContent({this.parent = null});
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -38,7 +41,7 @@ class PostScreenContent extends StatelessWidget {
                 Center(child:Text('No comments.',style: TextStyle(color: Colors.black),)):
                 ChangeNotifierProvider.value(
                     value:_postData.comment_list[index],
-                    child: CommentFrame()
+                    child: CommentFrame(parent: parent, deleteWork: true,)
                 );
               }
           ),

@@ -55,213 +55,217 @@ class _UserDescriptionState extends State<UserDescription> {
     if(!widget.currentUser) {
     }
 
-    return Container(
-      margin:const EdgeInsets.only(bottom: 4),
-      constraints: BoxConstraints(
-        maxHeight: 240
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+    return Card(
 
-            Row(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          margin:const EdgeInsets.only(bottom: 4),
+          constraints: BoxConstraints(
+            maxHeight: 260
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
 
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
+                Row(
 
-                Flexible(
-                  fit: FlexFit.tight,
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                        Hero(
-                          tag: widget.userId == null ? 1 : widget.userId,
-                          child: GestureDetector(
-                            onTap: ()async{
-                              if(widget.currentUser == true){
-                              final result = await Navigator.of(context)
-                                  .pushNamed(ImageScreen.route,arguments: true);
-                              setState(() {
-                                if(result!=null) {
-                                  widget._imageUrl = result;
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
 
-                                }
-                              });
-                              }else{null;}
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage:widget._imageUrl != null? NetworkImage(widget._imageUrl):null,
-                              child:
-                                  widget._imageUrl == null
-                                  ? Center(
-                                child: Text(
-                                  '+ Add Image',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child:
+                            Hero(
+                              tag: widget.userId == null ? 1 : widget.userId,
+                              child: GestureDetector(
+                                onTap: ()async{
+                                  if(widget.currentUser == true){
+                                  final result = await Navigator.of(context)
+                                      .pushNamed(ImageScreen.route,arguments: true);
+                                  setState(() {
+                                    if(result!=null) {
+                                      widget._imageUrl = result;
+
+                                    }
+                                  });
+                                  }else{null;}
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage:widget._imageUrl != null? NetworkImage(widget._imageUrl):null,
+                                  child:
+                                      widget._imageUrl == null
+                                      ? Center(
+                                    child: Text(
+                                      '+ Add Image',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20),
+                                    ),
+                                  )
+                                      :null,
+                                  maxRadius: 70,
+
+                                  //should be image
+
                                 ),
-                              )
-                                  :null,
-                              maxRadius: 70,
-
-                              //should be image
-
+                              ),
                             ),
-                          ),
-                        ),
 
-                  ),
+                      ),
+                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 1,
+                      child:
+                              Align(
+                                alignment: Alignment.center,
+                                child: FittedBox(
+                                    child:  Text(widget.userName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),)),
+                              ),
+
+                    )
+                  ],
                 ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: FittedBox(
-                                child:  Text(widget.userName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),)),
-                          ),
-                      const SizedBox(height: 20,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap:()=> Navigator.of(context).pushNamed(FollowScreen.route , arguments: {
-                              'heading':'Followers',
-                              'followList':widget._followers
-                            }),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap:()=> Navigator.of(context).pushNamed(FollowScreen.route , arguments: {
+                        'heading':'Followers',
+                        'followList':widget._followers
+                      }),
+                      child: Column(
+                        children: <Widget>[
+                          Text(widget._followers.length.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                          FittedBox(
                             child: Column(
                               children: <Widget>[
-                                 Text(widget._followers.length.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
-                                FittedBox(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text("Followers",style: TextStyle( fontSize: 15),),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: ()=> Navigator.of(context).pushNamed(FollowScreen.route , arguments: {
-                          'heading':'Following',
-                          'followList':widget._following
-                          }),
-                            child: Column(
-                              children: <Widget>[
-                                 Text(widget._following.length.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
-                                 FittedBox(
-                                   child: Column(
-                                     children: <Widget>[
-                                       Text("Following",style: TextStyle( fontSize: 15),),
-                                     ],
-                                   ),
-                                 ),
+                                Text("Followers",style: TextStyle( fontSize: 15),),
                               ],
                             ),
                           ),
                         ],
-                      )
-                    ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: ()=> Navigator.of(context).pushNamed(FollowScreen.route , arguments: {
+                        'heading':'Following',
+                        'followList':widget._following
+                      }),
+                      child: Column(
+                        children: <Widget>[
+                          Text(widget._following.length.toString() , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                          FittedBox(
+                            child: Column(
+                              children: <Widget>[
+                                Text("Following",style: TextStyle( fontSize: 15),),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+
+                    child: RaisedButton(
+                      child:widget._isLoading?Center(child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: CircularProgressIndicator(backgroundColor: Colors.white,),
+                      ),) : Text(widget.currentUser?'LogOut':isFriendCheck ?"Unfollow" : "Follow"),
+                      onPressed: ()async{
+
+                        if(widget.currentUser == true)
+                         {logOut(context);}
+                        else{
+
+                          if(!isFriendCheck) {
+                            setState(() {
+                              widget._isLoading=true;
+                            });
+
+                            await Firestore.instance.collection('users/${widget
+                                .userId}/Followers').document(
+                                UserProvider.mainUser.userId).setData(
+                                {'name': UserProvider.mainUser.userName,
+                                  'imageUrl': UserProvider.mainUser.userImageUrl
+                                });
+                            await Firestore.instance.collection('users/${UserProvider.mainUser.userId}/Following').document(
+                                widget.userId).setData(
+                                {'name': widget.userName,
+                                  'imageUrl': widget._imageUrl
+                                });
+                            UserProvider.mainUser.following =[];
+                            UserProvider.mainUser.following.add(FollowMap(
+                              userId: widget.userId,
+                              userName: widget.userName,
+                              userImageUrl: widget._imageUrl
+                            ));
+
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text(
+                                  'You followed ${widget.userName}',
+                                  style: TextStyle(color: Colors.white),),
+                                  backgroundColor: Theme
+                                      .of(context)
+                                      .primaryColor,));
+                            setState(() {
+                              widget._isLoading=false;
+                            });
+                          }else{
+                            setState(() {
+                              widget._isLoading=true;
+                            });
+                            await Firestore.instance.collection('users/${widget
+                                .userId}/Followers').document(
+                                UserProvider.mainUser.userId).delete();
+                            await Firestore.instance.collection('users/${UserProvider.mainUser.userId}/Following').document(
+                                widget.userId).delete();
+                            UserProvider.mainUser.following.removeWhere((FollowMap element) => element.userId == widget.userId);
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text(
+                                  'You unfollowed ${widget.userName}',
+                                  style: TextStyle(color: Colors.white),),
+                                  backgroundColor: Theme
+                                      .of(context)
+                                      .primaryColor,));
+                            setState(() {
+                              widget._isLoading=false;
+                            });
+                          }
+                        }
+                        },
+                    ),
                   ),
-                )
-              ],
-            ),
+                  SizedBox(width: 10,),
 
-          Row(
-
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Expanded(
-
-                child: RaisedButton(
-                  child:widget._isLoading?Center(child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: CircularProgressIndicator(backgroundColor: Colors.white,),
-                  ),) : Text(widget.currentUser?'LogOut':isFriendCheck ?"Unfollow" : "Follow"),
-                  onPressed: ()async{
-
-                    if(widget.currentUser == true)
-                     {logOut(context);}
-                    else{
-
-                      if(!isFriendCheck) {
-                        setState(() {
-                          widget._isLoading=true;
-                        });
-
-                        await Firestore.instance.collection('users/${widget
-                            .userId}/Followers').document(
-                            UserProvider.mainUser.userId).setData(
-                            {'name': UserProvider.mainUser.userName,
-                              'imageUrl': UserProvider.mainUser.userImageUrl
-                            });
-                        await Firestore.instance.collection('users/${UserProvider.mainUser.userId}/Following').document(
-                            widget.userId).setData(
-                            {'name': widget.userName,
-                              'imageUrl': widget._imageUrl
-                            });
-                        UserProvider.mainUser.following =[];
-                        UserProvider.mainUser.following.add(FollowMap(
-                          userId: widget.userId,
-                          userName: widget.userName,
-                          userImageUrl: widget._imageUrl
-                        ));
-
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(
-                              'You followed ${widget.userName}',
-                              style: TextStyle(color: Colors.white),),
-                              backgroundColor: Theme
-                                  .of(context)
-                                  .primaryColor,));
-                        setState(() {
-                          widget._isLoading=false;
-                        });
-                      }else{
-                        setState(() {
-                          widget._isLoading=true;
-                        });
-                        await Firestore.instance.collection('users/${widget
-                            .userId}/Followers').document(
-                            UserProvider.mainUser.userId).delete();
-                        await Firestore.instance.collection('users/${UserProvider.mainUser.userId}/Following').document(
-                            widget.userId).delete();
-                        UserProvider.mainUser.following.removeWhere((FollowMap element) => element.userId == widget.userId);
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text(
-                              'You unfollowed ${widget.userName}',
-                              style: TextStyle(color: Colors.white),),
-                              backgroundColor: Theme
-                                  .of(context)
-                                  .primaryColor,));
-                        setState(() {
-                          widget._isLoading=false;
-                        });
-                      }
-                    }
-                    },
-                ),
-              ),
-              SizedBox(width: 10,),
-
-              widget.currentUser?Container(): Expanded(
-                child: RaisedButton(
-                  child: Text("Messege"),
-                  onPressed: (){
-                    Navigator.of(context).pushNamed(ChatUserScreen.route,arguments: widget.data);
-                  },
-                ),
-              ),
+                  widget.currentUser?Container(): Expanded(
+                    child: RaisedButton(
+                      child: Text("Messege"),
+                      onPressed: (){
+                        Navigator.of(context).pushNamed(ChatUserScreen.route,arguments: widget.data);
+                      },
+                    ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
 
+          ),
+        ),
       ),
     );
   }

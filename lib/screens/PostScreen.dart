@@ -12,10 +12,10 @@ class PostScreen extends StatefulWidget {
   bool _isLoading2 = false;
 
   @override
-  _PostScreenState createState() => _PostScreenState();
+  PostScreenState createState() => PostScreenState();
 }
 
-class _PostScreenState extends State<PostScreen> {
+class PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -55,7 +55,7 @@ class _PostScreenState extends State<PostScreen> {
         child:widget._isLoading2? Center(child: CircularProgressIndicator(),):  ChangeNotifierProvider.value(
             value: post,
 
-            child:widget._isLoading? Center(child: CircularProgressIndicator(),): PostScreenContent()
+            child:widget._isLoading? Center(child: CircularProgressIndicator(),): PostScreenContent(parent: this,)
           ),
       ),
 

@@ -6,10 +6,15 @@ import 'package:socialmediaapp/Tools/CommentScreenContent.dart';
 import 'package:socialmediaapp/Tools/ReplyFrame.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
 
-class CommentScreen extends StatelessWidget {
+class CommentScreen extends StatefulWidget {
 
   static const route = './comment_screen';
 
+  @override
+  CommentScreenState createState() => CommentScreenState();
+}
+
+class CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -22,10 +27,8 @@ class CommentScreen extends StatelessWidget {
       ),
       body: ChangeNotifierProvider.value(
         value:_comment,
-        child:CommentScreenContent()
+        child:CommentScreenContent(parent: this,)
       ),
     );
   }
-
-
 }

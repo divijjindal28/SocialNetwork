@@ -4,9 +4,12 @@ import 'package:socialmediaapp/Tools/CommentFrame.dart';
 import 'package:socialmediaapp/Tools/ReplyFrame.dart';
 import 'package:socialmediaapp/Tools/SendText.dart';
 import 'package:provider/provider.dart';
+import 'package:socialmediaapp/screens/CommentScreen.dart';
 
 class CommentScreenContent extends StatelessWidget {
 
+  CommentScreenState parent;
+  CommentScreenContent({this.parent = null});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class CommentScreenContent extends StatelessWidget {
                 Center(child:Text('No Replies.',style: TextStyle(color: Colors.black),)):
                 ChangeNotifierProvider.value(
                     value:_comment.reply_list[index],
-                    child: ReplyFrame(_comment.comment_id));
+                    child: ReplyFrame(parent: parent,commentId:_comment.comment_id));
               }
           ),
         ),

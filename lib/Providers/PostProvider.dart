@@ -36,6 +36,26 @@ class Post extends ChangeNotifier {
     @required this.time,
   });
 
+  Future<void> deletePostComment(String commentId) async {
+    String _tokenId = UserProvider.mainUser.tokenId;
+
+    try {
+      final response = await http.delete(
+          'https://socialnetwork-fa878.firebaseio.com/posts/${UserProvider.mainUser.currentPostId}/comments/${commentId}.json?auth=$_tokenId');
+
+      if (response.statusCode > 400) {
+        throw HttpException("Something went wrong , Please try again.");
+      } else {
+        comment_list.removeWhere((element) => element.comment_id ==commentId);
+        comments_count = comments_count - 1;
+      }
+      //_myTimeLinePosts.insert(0, _newPost);
+      notifyListeners();
+    } catch (err) {
+      throw HttpException("Something went wrong , Please try again.");
+    }
+  }
+
   Future<void> sharePost(BuildContext context, bool currentUser, String postId,
       String description, String imagePath) async {
     try {

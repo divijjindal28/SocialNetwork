@@ -12,7 +12,7 @@ class SendText extends StatefulWidget {
   String text;
   String id ;
   final _form = GlobalKey<FormState>();
-
+  bool _loading = false;
   SendText(this.id,this.text,this.type);
   @override
   _SendTextState createState() => _SendTextState();
@@ -28,6 +28,9 @@ class _SendTextState extends State<SendText> {
     void _onMessageSend()async{
       if(!widget._form.currentState.validate()){return;}
 
+      setState(() {
+        widget._loading=true;
+      });
       try {
         if (widget.type == 0) {
           var post = Provider.of<Post>(context, listen: false);
@@ -50,7 +53,9 @@ class _SendTextState extends State<SendText> {
       }catch(error){
         MessegeBox.ShowError(context: context,msg: error.toString(),intent: "ERROR");
       }
-
+      setState(() {
+        widget._loading=false;
+      });
       _controller.clear();
     }
 
@@ -105,7 +110,7 @@ class _SendTextState extends State<SendText> {
                 ),
 
               ),
-              IconButton(icon:const Icon(Icons.send,size: 25,), onPressed: _onMessageSend)
+              IconButton(icon: Icon(Icons.send,size: 25,color: widget._loading ? Colors.black12:Colors.black,), onPressed:widget._loading? null:_onMessageSend)
             ],
           ),
 
