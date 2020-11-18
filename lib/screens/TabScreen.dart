@@ -5,6 +5,7 @@ import 'package:socialmediaapp/screens/HomeScreen.dart';
 import 'package:socialmediaapp/screens/NotificationScreen.dart';
 import 'package:socialmediaapp/screens/SearchScreen.dart';
 import 'package:socialmediaapp/screens/UserScreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class TabScreen extends StatefulWidget {
@@ -20,7 +21,20 @@ class _tabs_screenState extends State<TabScreen> {
 
   @override
   void initState() {
-    //final fbm = FirebaseMesseging();
+    final fbm = FirebaseMessaging();
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onMessage: (msg){
+
+      },
+      onLaunch: (msg){
+
+      },
+      onResume: (msg){
+
+      },
+    );
+    fbm.subscribeToTopic('chat');
 
     pages =  [
 

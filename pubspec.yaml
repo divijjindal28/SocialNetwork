@@ -36,6 +36,7 @@ dev_dependencies:
   cloud_firestore: ^0.13.7
   firebase_database: ^3.1.6
   firebase_messaging: ^6.0.16
+  cloud_firestore_web: ^0.1.1+2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -50,10 +51,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/bf.jpg
-    - assets/t_shirt.png
-    - assets/loading1.png
-    - assets/loading2.jpg
     - assets/loading3.gif
     - assets/add.png
   #  - images/a_dot_ham.jpeg

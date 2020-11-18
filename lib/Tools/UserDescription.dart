@@ -62,7 +62,7 @@ class _UserDescriptionState extends State<UserDescription> {
         child: Container(
           margin:const EdgeInsets.only(bottom: 4),
           constraints: BoxConstraints(
-            maxHeight: 260
+            minHeight: 260
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
